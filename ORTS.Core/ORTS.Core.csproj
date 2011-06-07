@@ -59,11 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\AnonymousDisposable.cs" />
     <Compile Include="Reactive\Observable.cs" />
+    <Compile Include="Sound\ISound.cs" />
     <Compile Include="Timing\AsyncObservableTimer.cs" />
     <Compile Include="Timing\IGameTime.cs" />
     <Compile Include="Timing\ObservableTimer.cs" />
     <Compile Include="Timing\TickTime.cs" />
     <Compile Include="Timing\TimerMessage.cs" />
+    <Compile Include="Video\IVideo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

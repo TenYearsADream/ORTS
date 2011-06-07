@@ -5,6 +5,8 @@ using System.Text;
 using ORTS.Core.Messaging;
 using ORTS.Core.Timing;
 using ORTS.Core.Messages;
+using ORTS.Core.Video;
+using ORTS.Core.Sound;
 
 namespace ORTS.Core
 {
@@ -13,10 +15,18 @@ namespace ORTS.Core
         public MessageBus Bus { get; private set; }
         public ObservableTimer Timer { get; private set; }
         public bool IsRunning { get; private set; }
+
+        public IVideo Video { get; private set; }
+        public ISound Sound { get; private set; }
+
         public Engine()
         {
+
             this.Timer = new ObservableTimer();
             this.Bus = new MessageBus();
+
+            //start video, sound
+
             this.Timer.Subscribe(t => this.Update(t));
             this.Timer.SubSample(5).Subscribe(t => Bus.SendAll());
         }
