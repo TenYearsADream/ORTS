@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ORTS.Core.Math
+namespace ORTS.Core.Maths
 {
-    class Mat4
+    class Quat
     {
     }
 }
