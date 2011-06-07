@@ -5,8 +5,10 @@ using System.Text;
 
 namespace ORTS.Core.Messaging
 {
-    public interface IMessage
+    public interface IBuffer<T> : IEnumerable<T>
     {
-
+        void Add(T item);
+        int Count();
+        void Clear();
     }
 }

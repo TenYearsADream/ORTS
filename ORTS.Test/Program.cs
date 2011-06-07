@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ORTS.Core.Messaging
+namespace ORTS.Test
 {
-    public interface IMessage
+    class Program
     {
-
+        static void Main(string[] args)
+        {
+        }
     }
 }
