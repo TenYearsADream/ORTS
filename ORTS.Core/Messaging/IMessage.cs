@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ORTS.Core.Timing;
 
 namespace ORTS.Core.Messaging
 {
     public interface IMessage
     {
-
+        IGameTime TimeSent { get; }
     }
 }

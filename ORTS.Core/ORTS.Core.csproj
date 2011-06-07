@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,19 +42,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\ObservableExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Maths\Mat4.cs" />
     <Compile Include="Maths\Quat.cs" />
     <Compile Include="Maths\Vect3.cs" />
+    <Compile Include="Messaging\Buffer.cs" />
+    <Compile Include="Messaging\IBuffer.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\IHasMessageBus.cs" />
+    <Compile Include="Messaging\Messages\BaseMessage.cs" />
+    <Compile Include="Messaging\Messages\SystemMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\AnonymousDisposable.cs" />
     <Compile Include="Reactive\Observable.cs" />
+    <Compile Include="Timing\AsyncObservableTimer.cs" />
+    <Compile Include="Timing\IGameTime.cs" />
+    <Compile Include="Timing\ObservableTimer.cs" />
+    <Compile Include="Timing\TickTime.cs" />
+    <Compile Include="Timing\TimerMessage.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messaging\Messages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
