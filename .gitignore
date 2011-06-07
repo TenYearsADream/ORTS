@@ -3,6 +3,7 @@
 [Bb]in/
 [Oo]bj/
 App_Data/
+TestResults/
 *.suo
 *.sln.*
 *.csproj.*
