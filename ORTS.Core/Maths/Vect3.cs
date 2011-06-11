@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ORTS.Core.Maths
 {
-    public class Vect3
+    public class Vect3 : IFormattable, IComparable, IComparable<Vect3>, IEquatable<Vect3>
     {
         public double X { get; private set; }
         public double Y { get; private set; }
@@ -200,6 +200,10 @@ namespace ORTS.Core.Maths
             return this.X.GetHashCode() ^ this.Y.GetHashCode() ^ this.Z.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return (System.String.Format("Vector3({0},{1},{2})", X, Y, Z));
+        }
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return (System.String.Format("Vector3({0},{1},{2})", X, Y, Z));

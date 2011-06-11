@@ -5,7 +5,7 @@ using System.Text;
 using ORTS.Core.Timing;
 using ORTS.Core.Messaging;
 
-namespace ORTS.Core.Messages
+namespace ORTS.Core.Messaging
 {
     public abstract class BaseMessage : IMessage
     {

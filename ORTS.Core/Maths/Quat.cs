@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ORTS.Core.Maths
 {
-    class Quat
+    public class Quat
     {
     }
 }

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORTS.Core.OpenTKHelper", "ORTS.Core.OpenTKHelper\ORTS.Core.OpenTKHelper.csproj", "{D957ACFA-4281-4040-BB38-546F7A280A6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,16 @@ Global
 		{7DF64042-6344-47A3-BAE7-FC2136B618FD}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7DF64042-6344-47A3-BAE7-FC2136B618FD}.Release|x86.ActiveCfg = Release|x86
 		{7DF64042-6344-47A3-BAE7-FC2136B618FD}.Release|x86.Build.0 = Release|x86
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

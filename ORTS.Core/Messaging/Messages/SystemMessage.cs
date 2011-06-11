@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ORTS.Core.Timing;
 
-namespace ORTS.Core.Messages
+namespace ORTS.Core.Messaging
 {
     public class SystemMessage : BaseMessage
     {

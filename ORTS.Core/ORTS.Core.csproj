@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,10 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\LockCollection.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="GameObject\GameObjectFactory.cs" />
+    <Compile Include="GameObject\IGameObject.cs" />
+    <Compile Include="GameObject\IGameObjectFactory.cs" />
+    <Compile Include="GameObject\IHasAcceleration.cs" />
+    <Compile Include="GameObject\IHasGeometry.cs" />
+    <Compile Include="GameObject\IHasPosition.cs" />
+    <Compile Include="GameObject\IHasVelocity.cs" />
+    <Compile Include="Graphics\IGameObjectView.cs" />
     <Compile Include="Maths\Mat4.cs" />
     <Compile Include="Maths\Quat.cs" />
     <Compile Include="Maths\Vect3.cs" />
@@ -55,7 +65,15 @@
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\IHasMessageBus.cs" />
     <Compile Include="Messaging\Messages\BaseMessage.cs" />
+    <Compile Include="Messaging\Messages\LoadObjectView.cs" />
+    <Compile Include="Messaging\Messages\KeyUp.cs" />
+    <Compile Include="Messaging\Messages\KeyDown.cs" />
+    <Compile Include="Messaging\Messages\ObjectCreated.cs" />
+    <Compile Include="Messaging\Messages\ObjectCreationRequest.cs" />
+    <Compile Include="Messaging\Messages\ObjectDestroyed.cs" />
+    <Compile Include="Messaging\Messages\ObjectDestructionRequest.cs" />
     <Compile Include="Messaging\Messages\SystemMessage.cs" />
+    <Compile Include="Messaging\Messages\GraphicsMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\AnonymousDisposable.cs" />
     <Compile Include="Reactive\Observable.cs" />
@@ -65,9 +83,11 @@
     <Compile Include="Timing\ObservableTimer.cs" />
     <Compile Include="Timing\TickTime.cs" />
     <Compile Include="Timing\TimerMessage.cs" />
-    <Compile Include="Video\IVideo.cs" />
+    <Compile Include="Graphics\IGraphics.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Physics\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
