@@ -26,9 +26,8 @@ namespace ORTS.Test
                 engine.Bus.OfType<KeyDown>().Subscribe(m => Console.WriteLine("{0} KeyDown - {1}", m.TimeSent.ToString(),m.Key.ToString()));
                 engine.Bus.OfType<KeyUp>().Subscribe(m => KeyUp(m,engine));
                 engine.Bus.OfType<GraphicsLoadedMessage>().Subscribe(m => engine.Bus.Add(new LoadObjectView(engine.Timer.LastTickTime, new TestObjectView(), typeof(TestObject))));
-
+                //engine.Timer.Subscribe(t => engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(TestObject))));
                 engine.Start();
-               
                 bool finish = false;
                 while (!finish)
                 {
@@ -42,10 +41,16 @@ namespace ORTS.Test
         private void KeyUp(KeyUp m, GameEngine engine)
         {
             Console.WriteLine("{0} KeyUp - {1}", m.TimeSent.ToString(), m.Key.ToString());
-            if (m.Key == Keys.Space)
+            if (m.Key == Keys.Space )
             {
                 engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(TestObject)));
             }
+            if (m.Key == Keys.A)
+            {
+               
+            }
+
+
             if (m.Key == Keys.Escape)
             {
                 engine.Stop();

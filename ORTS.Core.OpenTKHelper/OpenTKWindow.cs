@@ -21,7 +21,7 @@ namespace ORTS.Core.OpenTKHelper
         public ConcurrentDictionary<Type,IGameObjectView> Views { get; private set; }
 
         public OpenTKWindow(GameEngine engine)
-            : base(800, 600, new GraphicsMode(32, 24, 0, 8), "ORTS.Test")
+            : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
             Views= new ConcurrentDictionary<Type,IGameObjectView>();
             this.Engine = engine;
@@ -69,7 +69,7 @@ namespace ORTS.Core.OpenTKHelper
                 }
             }
 
-            this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count;
+            this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + "Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs e)

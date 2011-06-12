@@ -6,6 +6,7 @@ namespace ORTS.Core.Graphics
     {
         void Load();
         bool Loaded { get; }
+        void Unload();
         void Render(IHasGeometry GameObject);
     }
 }
