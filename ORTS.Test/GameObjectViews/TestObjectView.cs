@@ -19,7 +19,7 @@ namespace ORTS.Test.GameObjectViews
     class TestObjectView : IGameObjectView
     {
         public bool Loaded { get; private set; }
-        private int List;
+
         WebView webView;
 
         int texture;
@@ -136,7 +136,7 @@ namespace ORTS.Test.GameObjectViews
         }
         public void Unload()
         {
-            GL.DeleteLists(List, 1);
+            //GL.DeleteLists(List, 1);
         }
     }
 }
