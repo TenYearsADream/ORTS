@@ -39,8 +39,8 @@ namespace ORTS.Test.GameObjects
         {
             this.Bus = bus;
             Random rnd = new Random();
-            this.Position = new Vect3(rnd.Next(0, 10), rnd.Next(0, 10), 0);
-            this.Velocity = new Vect3(rnd.Next(-5, 5), rnd.Next(-5, 5), 0);
+            this.Position = new Vect3(-50, -50, 0);
+            this.Velocity = new Vect3(rnd.Next(0, 0), rnd.Next(0, 0), 0);
             this.Acceleration = new Vect3(0, 0, 0);
             this.Color = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
         }

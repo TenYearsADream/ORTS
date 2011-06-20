@@ -34,6 +34,9 @@ namespace ORTS.Core.OpenTKHelper
             Keyboard.KeyUp += (object sender, KeyboardKeyEventArgs e) => { this.Engine.Bus.Add(new KeyUp(this.Engine.Timer.LastTickTime, map.Do(e.Key))); };
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
         }
+        public void LoadView(Type type, IGameObjectView View){
+            Views.TryAdd(type, View);
+        }
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -87,6 +90,11 @@ namespace ORTS.Core.OpenTKHelper
         protected override void OnUnload(EventArgs e)
         {
             base.OnUnload(e);
+        }
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Engine.Stop();
+            base.OnClosing(e);
         }
     }
 }

@@ -53,8 +53,10 @@
     <Compile Include="GameObject\IGameObjectFactory.cs" />
     <Compile Include="GameObject\IHasAcceleration.cs" />
     <Compile Include="GameObject\IHasGeometry.cs" />
+    <Compile Include="GameObject\IHasParent.cs" />
     <Compile Include="GameObject\IHasPosition.cs" />
     <Compile Include="GameObject\IHasVelocity.cs" />
+    <Compile Include="GameObject\IParent.cs" />
     <Compile Include="Graphics\IGameObjectView.cs" />
     <Compile Include="Maths\Mat4.cs" />
     <Compile Include="Maths\Quat.cs" />

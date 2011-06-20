@@ -21,8 +21,13 @@ namespace ORTS.Core.OpenTKHelper
             Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "Graphics starting."));
             using (OpenTKWindow p = new OpenTKWindow(engine))
             {
+                LoadViews(p);
                 p.Run();
             }
+        }
+        public virtual void LoadViews(OpenTKWindow p)
+        {
+
         }
         public void Stop()
         {

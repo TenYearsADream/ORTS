@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AwesomiumSharp">
+      <HintPath>..\Packages\Awesomium-1.6.1\AwesomiumSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\Packages\Ninject-2.2.0.0\Ninject.dll</HintPath>
     </Reference>
@@ -74,6 +77,17 @@
       <Project>{8EEB6419-D08A-461B-A7AC-06BD6DE9132A}</Project>
       <Name>ORTS.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Awesomium.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AwesomiumProcess.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icudt42.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

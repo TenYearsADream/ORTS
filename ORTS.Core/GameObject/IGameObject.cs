@@ -5,6 +5,7 @@ namespace ORTS.Core.GameObject
 {
     public interface IGameObject : IHasMessageBus
     {
+
         void Update(TickTime tickTime);
     }
 }

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORTS.Core.OpenTKHelper", "ORTS.Core.OpenTKHelper\ORTS.Core.OpenTKHelper.csproj", "{D957ACFA-4281-4040-BB38-546F7A280A6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORTS.VoxelRTS", "ORTS.VoxelRTS\ORTS.VoxelRTS.csproj", "{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,16 @@ Global
 		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D957ACFA-4281-4040-BB38-546F7A280A6F}.Release|x86.ActiveCfg = Release|Any CPU
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Debug|x86.ActiveCfg = Debug|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Debug|x86.Build.0 = Debug|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Release|Any CPU.ActiveCfg = Release|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Release|Mixed Platforms.Build.0 = Release|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Release|x86.ActiveCfg = Release|x86
+		{30B1DCFC-DA6F-4838-A120-7B8FB8CC4975}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
