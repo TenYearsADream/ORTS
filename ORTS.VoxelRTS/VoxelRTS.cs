@@ -27,6 +27,7 @@ namespace ORTS.VoxelRTS
                 engine.Bus.OfType<KeyUp>().Subscribe(m => KeyUp(m, engine));
                 //engine.Bus.OfType<GraphicsLoadedMessage>().Subscribe(m => engine.Bus.Add(new LoadObjectView(engine.Timer.LastTickTime, new TestObjectView(), typeof(TestObject))));
                 //engine.Timer.Subscribe(t => engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(TestObject))));
+                
                 engine.Start();
                 while (engine.IsRunning)
                 {

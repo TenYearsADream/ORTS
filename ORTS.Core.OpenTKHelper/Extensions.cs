@@ -13,6 +13,10 @@ namespace ORTS.Core.OpenTKHelper
         {
             return new Vector3((float)v.X, (float)v.Y, (float)v.Z);
         }
+        public static Vector3d ToVector3d(this Vect3 v)
+        {
+            return new Vector3d(v.X, v.Y, v.Z);
+        }
         public static Quaternion ToQuaternion(this Quat q)
         {
             return new Quaternion((float)q.X, (float)q.Y, (float)q.Z, (float)q.W);

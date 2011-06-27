@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ORTS.Core.Maths
+namespace ORTS.Core.GameObject
 {
-    public class Mat4
+    public interface IBody : IHasPosition, IHasVelocity, IHasAcceleration
     {
+
     }
 }

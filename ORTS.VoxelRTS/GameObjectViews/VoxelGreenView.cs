@@ -8,6 +8,8 @@ using OpenTK.Graphics.OpenGL;
 using ORTS.Core.OpenTKHelper;
 using ORTS.Core.GameObject;
 using System.Drawing;
+using ORTS.Core.Maths;
+using OpenTK;
 
 namespace ORTS.VoxelRTS.GameObjectViews
 {
@@ -66,9 +68,14 @@ namespace ORTS.VoxelRTS.GameObjectViews
             this.Loaded = true;
         }
 
+
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
+
+            AxisAngle aa = GameObject.Rotation.toAxisAngle();
+            GL.Rotate(aa.Angle, aa.Axis.ToVector3d());
+
             GL.CallList(List);
         }
         public void Unload()

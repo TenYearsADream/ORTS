@@ -1,17 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
 using OpenTK.Input;
-using ORTS.Core.Messaging;
-using ORTS.Core.Graphics;
-using System.Reflection;
-using System.Collections.Concurrent;
 using ORTS.Core.GameObject;
+using ORTS.Core.Graphics;
+using ORTS.Core.Messaging;
 
 namespace ORTS.Core.OpenTKHelper
 {
@@ -23,6 +20,7 @@ namespace ORTS.Core.OpenTKHelper
         public OpenTKWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
+            VSync = VSyncMode.On;
             Views= new ConcurrentDictionary<Type,IGameObjectView>();
             this.Engine = engine;
 

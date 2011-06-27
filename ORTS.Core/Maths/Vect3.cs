@@ -27,6 +27,18 @@ namespace ORTS.Core.Maths
         {
             get { return new Vect3(); }
         }
+        public static Vect3 UnitX
+        {
+            get { return new Vect3(1.0, 0, 0); }
+        }
+        public static Vect3 UnitY
+        {
+            get { return new Vect3(0, 1.0, 0); }
+        }
+        public static Vect3 UnitZ
+        {
+            get { return new Vect3(0, 0, 1.0); }
+        }
 
         public double Length
         {
