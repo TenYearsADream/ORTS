@@ -128,9 +128,14 @@ namespace ORTS.Core.Maths
             return new Vect3(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
-        public static Vect3 operator *(Vect3 v1, double v2)
+        public static Vect3 operator *(Vect3 v1, double scale)
         {
-            return v1.Multiply(v2);
+            return v1.Multiply(scale);
+        }
+
+        public static Vect3 operator *(double scale, Vect3 v1)
+        {
+            return v1 * scale;
         }
 
         public static Vect3 operator /(Vect3 v1, double v2)

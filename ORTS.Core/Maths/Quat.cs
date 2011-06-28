@@ -13,16 +13,21 @@ namespace ORTS.Core.Maths
         public double Y { get; private set; }
         public double Z { get; private set; }
 
-        public static Quat Identity = new Quat(0, 0, 0, 1);
-
-        public Quat()
+        public Vect3 XYZ
         {
-            this.X = 0.0;
-            this.Y = 0.0;
-            this.Z = 0.0;
-            this.W = 1.0;
-            this.Normalize();
+            get
+            {
+                return new Vect3(X, Y, Z);
+            }
+            private set
+            {
+                X = value.X;
+                Y = value.Y;
+                Z = value.Z;
+            }
         }
+
+        public static Quat Identity = new Quat(0, 0, 0, 1);
 
         public Quat(double X, double Y, double Z, double W)
         {
@@ -32,7 +37,12 @@ namespace ORTS.Core.Maths
             this.W = W;
             this.Normalize();
         }
-
+        public Quat(Vect3 XYZ, double W)
+        {
+            this.XYZ = XYZ;
+            this.W = W;
+            this.Normalize();
+        }
         private void Normalize()
         {
             double mag = LengthSquared;
@@ -74,14 +84,21 @@ namespace ORTS.Core.Maths
             return new Quat(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
         }
 
-        public static Quat operator *(Quat q1, Quat q2)
+        public static Quat operator *(Quat left, Quat right)
         {
+            return new Quat(right.W * left.XYZ + left.W * right.XYZ + left.XYZ.CrossProduct(right.XYZ),
+                left.W * right.W - left.XYZ.DotProduct(right.XYZ));
+            /*
+             * result = new Quaterniond(
+                right.W * left.Xyz + left.W * right.Xyz + Vector3d.Cross(left.Xyz, right.Xyz),
+                left.W * right.W - Vector3d.Dot(left.Xyz, right.Xyz));
             return new Quat(
-                q1.W * q2.X + q1.X * q2.W + q1.Y * q2.Z - q1.Z * q2.Y,
-                q1.W * q2.Y + q1.Y * q2.W + q1.Z * q2.X - q1.X * q2.Z,
-                q1.W * q2.Z + q1.Z * q2.W + q1.X * q2.Y - q1.Y * q2.X,
-                q1.W * q2.W - q1.X * q2.X - q1.Y * q2.Y - q1.Z * q2.Z
+                left.W * right.X + left.X * right.W + left.Y * right.Z - left.Z * right.Y,
+                left.W * right.Y + left.Y * right.W + left.Z * right.X - left.X * right.Z,
+                left.W * right.Z + left.Z * right.W + left.X * right.Y - left.Y * right.X,
+                left.W * right.W - left.X * right.X - left.Y * right.Y - left.Z * right.Z
                 );
+             * */
         }
 
         public static Quat operator *(Quat quat, double scalar)
@@ -120,13 +137,17 @@ namespace ORTS.Core.Maths
 
         public AxisAngle toAxisAngle()
         {
-            double scale = this.Length;
-            return new AxisAngle(new Vect3(this.X / scale, this.Y / scale, this.Z / scale), Math.Acos(this.W) * 2.0f);
+            double scale = Math.Sqrt(1.0 - Math.Pow(this.W,2));
+            return new AxisAngle(new Vect3(this.X / scale, this.Y / scale, this.Z / scale), Angle.FromRadians(Math.Acos(this.W) * 2.0f));
         }
 
         public Euler toEuler()
         {
-            throw new NotImplementedException();
+            return new Euler(
+                Angle.FromRadians(Math.Atan2(2 * this.Y * this.W - 2 * this.X * this.Z, 1 - 2 * Math.Pow(this.Y, 2) - 2 * Math.Pow(this.Z, 2))),
+                Angle.FromRadians(Math.Asin(2 * this.X * this.Y + 2 * this.Z * this.W)),
+                Angle.FromRadians(Math.Atan2(2 * this.X * this.W - 2 * this.Y * this.Z, 1 - 2 * Math.Pow(this.X, 2) - 2 * Math.Pow(this.Z, 2)))
+            );
         }
 
         public Mat4 toMat4()

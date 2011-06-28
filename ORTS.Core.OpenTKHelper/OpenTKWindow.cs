@@ -43,6 +43,7 @@ namespace ORTS.Core.OpenTKHelper
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+
             foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
             {
                 if (!pair.Value.Loaded)
@@ -53,9 +54,22 @@ namespace ORTS.Core.OpenTKHelper
             }
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 50, 0, 0, 0, 0, 1, 0);
+            Matrix4 lookat = Matrix4.LookAt(0, 5, 30, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
+
+
+            GL.Begin(BeginMode.Lines);
+            GL.Color4(Color4.Red);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(1f, 0f, 0f);
+            GL.Color4(Color4.Green);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(0f, 1f, 0f);
+            GL.Color4(Color4.Blue);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(0f, 0f, 1f);
+            GL.End();
 
             lock (this.Engine.Factory.GameObjectsLock)
             {

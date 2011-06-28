@@ -49,19 +49,18 @@ namespace ORTS.VoxelRTS.GameObjects
             this.Position = new Vect3(0, 0, 0);
             this.Velocity = new Vect3(rnd.Next(-5, 5), rnd.Next(-5, 5), 0);
             this.Acceleration = new Vect3(0, 0, 0);
-
-            this.Rotation = new Quat(0,0,0,1);
-            this.RotationalVelocity = new AxisAngle(Vect3.UnitZ, Math.PI/4).toQuat();
-            
+            this.Rotation = new Quat(Math.Sqrt(0.5), 0, 0, Math.Sqrt(0.5));
+            this.RotationalVelocity = new Euler(Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5))).toQuat();
         }
 
 
         public void Update(TickTime tickTime)
         {
-    
+
+            this.Rotation = this.Rotation * (this.RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds);
             //Velocity = Velocity + (Acceleration * tickTime.GameTimeDelta.TotalSeconds);
-            //Position = Position + (Velocity * tickTime.GameTimeDelta.TotalSeconds);
-            this.Rotation = Rotation * RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds;
+            this.Position = this.Position + (this.Velocity * tickTime.GameTimeDelta.TotalSeconds);
+
         }
     }
 }

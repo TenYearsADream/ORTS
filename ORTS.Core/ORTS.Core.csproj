@@ -59,6 +59,7 @@
     <Compile Include="GameObject\IHasVelocity.cs" />
     <Compile Include="GameObject\IParent.cs" />
     <Compile Include="Graphics\IGameObjectView.cs" />
+    <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AxisAngle.cs" />
     <Compile Include="Maths\Euler.cs" />
     <Compile Include="Maths\Mat4.cs" />

@@ -22,7 +22,8 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public VoxelGreenView()
         {
             this.Loaded = false;
-        }
+
+       }
 
         public void Load()
         {
@@ -37,26 +38,31 @@ namespace ORTS.VoxelRTS.GameObjectViews
             GL.Vertex3(0.5f, 0.5f, -0.5f);
             GL.Vertex3(0.5f, -0.5f, -0.5f);
 
+            GL.Color3(Color.Blue);
             GL.Vertex3(-0.5f, -0.5f, -0.5f);
             GL.Vertex3(0.5f, -0.5f, -0.5f);
             GL.Vertex3(0.5f, -0.5f, 0.5f);
             GL.Vertex3(-0.5f, -0.5f, 0.5f);
 
+            GL.Color3(Color.BurlyWood);
             GL.Vertex3(-0.5f, -0.5f, -0.5f);
             GL.Vertex3(-0.5f, -0.5f, 0.5f);
             GL.Vertex3(-0.5f, 0.5f, 0.5f);
             GL.Vertex3(-0.5f, 0.5f, -0.5f);
 
+            GL.Color3(Color.DarkBlue);
             GL.Vertex3(-0.5f, -0.5f, 0.5f);
             GL.Vertex3(0.5f, -0.5f, 0.5f);
             GL.Vertex3(0.5f, 0.5f, 0.5f);
             GL.Vertex3(-0.5f, 0.5f, 0.5f);
 
+            GL.Color3(Color.DarkOrchid);
             GL.Vertex3(-0.5f, 0.5f, -0.5f);
             GL.Vertex3(-0.5f, 0.5f, 0.5f);
             GL.Vertex3(0.5f, 0.5f, 0.5f);
             GL.Vertex3(0.5f, 0.5f, -0.5f);
 
+            GL.Color3(Color.DodgerBlue);
             GL.Vertex3(0.5f, -0.5f, -0.5f);
             GL.Vertex3(0.5f, 0.5f, -0.5f);
             GL.Vertex3(0.5f, 0.5f, 0.5f);
@@ -72,10 +78,8 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
-
             AxisAngle aa = GameObject.Rotation.toAxisAngle();
-            GL.Rotate(aa.Angle, aa.Axis.ToVector3d());
-
+            GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
             GL.CallList(List);
         }
         public void Unload()
