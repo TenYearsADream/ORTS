@@ -89,9 +89,6 @@ namespace ORTS.Core.Maths
             return new Quat(right.W * left.XYZ + left.W * right.XYZ + left.XYZ.CrossProduct(right.XYZ),
                 left.W * right.W - left.XYZ.DotProduct(right.XYZ));
             /*
-             * result = new Quaterniond(
-                right.W * left.Xyz + left.W * right.Xyz + Vector3d.Cross(left.Xyz, right.Xyz),
-                left.W * right.W - Vector3d.Dot(left.Xyz, right.Xyz));
             return new Quat(
                 left.W * right.X + left.X * right.W + left.Y * right.Z - left.Z * right.Y,
                 left.W * right.Y + left.Y * right.W + left.Z * right.X - left.X * right.Z,
@@ -153,6 +150,11 @@ namespace ORTS.Core.Maths
         public Mat4 toMat4()
         {
             throw new NotImplementedException();
+        }
+
+        public Vect3 toVect3()
+        {
+            return this.XYZ;
         }
 
         public bool Equals(Quat other)

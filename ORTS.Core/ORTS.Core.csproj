@@ -58,6 +58,7 @@
     <Compile Include="GameObject\IHasPosition.cs" />
     <Compile Include="GameObject\IHasVelocity.cs" />
     <Compile Include="GameObject\IParent.cs" />
+    <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Graphics\IGameObjectView.cs" />
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AxisAngle.cs" />

@@ -9,6 +9,7 @@ using OpenTK.Input;
 using ORTS.Core.GameObject;
 using ORTS.Core.Graphics;
 using ORTS.Core.Messaging;
+using ORTS.Core.Maths;
 
 namespace ORTS.Core.OpenTKHelper
 {
@@ -16,6 +17,8 @@ namespace ORTS.Core.OpenTKHelper
     {
         public GameEngine Engine { get; private set; }
         public ConcurrentDictionary<Type,IGameObjectView> Views { get; private set; }
+
+        public OpenTKCamera camera { get; private set; }
 
         public OpenTKWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
@@ -28,9 +31,23 @@ namespace ORTS.Core.OpenTKHelper
 
             VSync = VSyncMode.Off;
             KeyMap map = new KeyMap();
-            Keyboard.KeyDown += (object sender, KeyboardKeyEventArgs e) => { this.Engine.Bus.Add(new KeyDown(this.Engine.Timer.LastTickTime, map.Do(e.Key))); };
-            Keyboard.KeyUp += (object sender, KeyboardKeyEventArgs e) => { this.Engine.Bus.Add(new KeyUp(this.Engine.Timer.LastTickTime, map.Do(e.Key))); };
+
+            Keyboard.KeyDown += (object sender, KeyboardKeyEventArgs e) => { 
+                this.Engine.Bus.Add(new KeyDown(this.Engine.Timer.LastTickTime, map.Do(e.Key))); 
+            };
+            Keyboard.KeyUp += (object sender, KeyboardKeyEventArgs e) => {
+                this.Engine.Bus.Add(new KeyUp(this.Engine.Timer.LastTickTime, map.Do(e.Key))); 
+            };
+
+            Mouse.WheelChanged += (object sender, MouseWheelEventArgs e) => {
+                camera.Translate(new Vect3(0,0,-e.DeltaPrecise));
+            };
+
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
+
+            camera = new OpenTKCamera();
+            camera.Translate(new Vect3(0, 0, 20));
+
         }
         public void LoadView(Type type, IGameObjectView View){
             Views.TryAdd(type, View);
@@ -43,21 +60,13 @@ namespace ORTS.Core.OpenTKHelper
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
-            {
-                if (!pair.Value.Loaded)
-                {
-                    pair.Value.Load();
-                    this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: "+pair.Value.ToString()));
-                }
-            }
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.LoadIdentity();
 
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 30, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
-
+            GL.Translate(camera.postion.ToVector3());
+            AxisAngle aa = camera.rotation.toAxisAngle();
+            GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
@@ -75,29 +84,66 @@ namespace ORTS.Core.OpenTKHelper
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
                 {
-                    GL.PushMatrix();
+                    
                     if (go is IHasGeometry && this.Views.ContainsKey(go.GetType()))
                     {
+                        GL.PushMatrix();
                         this.Views[go.GetType()].Render(go as IHasGeometry);
+                        GL.PopMatrix();
                     }
-                    GL.PopMatrix();
+                    
                 }
             }
 
-            this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + "Game Objects: "+Engine.Factory.GameObjects.Count;
+
+
+
+            this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
+            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            {
+                if (!pair.Value.Loaded)
+                {
+                    pair.Value.Load();
+                    this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
+                }
+            }
+
+            if (Keyboard[Key.W])
+            {
+                camera.Translate(new Vect3(0, 10f * e.Time, 0));
+            }
+
+            if (Keyboard[Key.S])
+            {
+                camera.Translate(new Vect3(0, -10f * e.Time, 0));
+            }
+
+            if (Keyboard[Key.A])
+            {
+                camera.Translate(new Vect3(-10f * e.Time,0, 0));
+            }
+
+            if (Keyboard[Key.D])
+            {
+                camera.Translate(new Vect3(10f * e.Time, 0, 0));
+            }
         }
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
             GL.Viewport(0, 0, Width, Height);
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 1, 64);
+
             GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 1, 128);
             GL.LoadMatrix(ref perspective);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
         }
         protected override void OnUnload(EventArgs e)
         {
@@ -108,5 +154,6 @@ namespace ORTS.Core.OpenTKHelper
             Engine.Stop();
             base.OnClosing(e);
         }
+
     }
 }

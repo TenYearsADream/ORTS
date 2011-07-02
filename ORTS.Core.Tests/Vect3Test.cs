@@ -13,7 +13,7 @@ namespace ORTS.Core.Tests
         [TestMethod]
         public void Vect3InitBlankTest()
         {
-            Vect3 vec = new Vect3();
+            Vect3 vec = Vect3.Zero;
             Assert.AreEqual<double>(0.0, vec.X);
             Assert.AreEqual<double>(0.0, vec.Y);
             Assert.AreEqual<double>(0.0, vec.Z);
@@ -37,9 +37,9 @@ namespace ORTS.Core.Tests
         public void Vect3NormalTest()
         {
             Vect3 vec = new Vect3(5.0, 0.0, 0.0);
-            Assert.AreEqual<double>(1.0, vec.Normalize().X);
-            Assert.AreEqual<double>(0.0, vec.Normalize().Y);
-            Assert.AreEqual<double>(0.0, vec.Normalize().Z);
+            Assert.AreEqual<double>(1.0, vec.Normalise().X);
+            Assert.AreEqual<double>(0.0, vec.Normalise().Y);
+            Assert.AreEqual<double>(0.0, vec.Normalise().Z);
         }
         [TestMethod]
         public void Vect3AddTest()

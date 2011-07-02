@@ -8,6 +8,6 @@ namespace ORTS.Core.GameObject
     public interface IParent : IGameObject, IHasPosition
     {
         List<IGameObject> Children { get; }
-        void AddChild(IGameObject Child);
+        void AddChild(IHasParent Child);
     }
 }

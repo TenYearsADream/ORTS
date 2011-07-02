@@ -11,11 +11,6 @@ namespace ORTS.Core.Maths
         public double Y { get; private set; }
         public double Z { get; private set; }
 
-        public Vect3()
-        {
-
-        }
-
         public Vect3(double x, double y, double z)
         {
             X = x;
@@ -25,7 +20,7 @@ namespace ORTS.Core.Maths
 
         public static Vect3 Zero
         {
-            get { return new Vect3(); }
+            get { return new Vect3(0, 0, 0); }
         }
         public static Vect3 UnitX
         {
@@ -50,7 +45,7 @@ namespace ORTS.Core.Maths
             get { return Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2); }
         }
 
-        public Vect3 Normalize()
+        public Vect3 Normalise()
         {
             if (this.Length == 0)
             {
@@ -97,10 +92,9 @@ namespace ORTS.Core.Maths
             return Math.Sqrt((this.X - v.X) * (this.X - v.X) + (this.Y - v.Y) * (this.Y - v.Y) + (this.Z - v.Z) * (this.Z - v.Z));
         }
 
-
         public double Angle(Vect3 v)
         {
-            return Math.Acos((this.Normalize()).DotProduct(v.Normalize()));
+            return Math.Acos((this.Normalise()).DotProduct(v.Normalise()));
         }
 
         public Vect3 Max(Vect3 v)
@@ -111,6 +105,11 @@ namespace ORTS.Core.Maths
         public Vect3 Min(Vect3 v)
         {
             return Min(this, v);
+        }
+
+        public Vect3 Rotate(Quat q)
+        {
+            return this + 2.0 * q.XYZ.CrossProduct(q.XYZ.CrossProduct(this) + q.W * this);
         }
 
         public Vect3 Interpolate(Vect3 other, double control)
@@ -185,7 +184,7 @@ namespace ORTS.Core.Maths
 
         public static double Angle(Vect3 v1, Vect3 v2)
         {
-            return Math.Acos((v1.Normalize()).DotProduct(v2.Normalize()));
+            return Math.Acos((v1.Normalise()).DotProduct(v2.Normalise()));
         }
 
         public static Vect3 Max(Vect3 v1, Vect3 v2)

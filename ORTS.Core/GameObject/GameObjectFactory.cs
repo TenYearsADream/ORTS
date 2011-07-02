@@ -12,7 +12,7 @@ namespace ORTS.Core.GameObject
         public List<IGameObject> GameObjects { get; private set; }
         public readonly object GameObjectsLock = new object();
         public MessageBus Bus { get; private set; }
-
+        protected Int32 NameCounter = 0;
         public GameObjectFactory(MessageBus bus)
         {
             GameObjects = new List<IGameObject>();

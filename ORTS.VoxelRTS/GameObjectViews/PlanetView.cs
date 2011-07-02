@@ -30,7 +30,19 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
-            
+            GL.Begin(BeginMode.Lines);
+            GL.Color4(Color4.Red);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(1f, 0f, 0f);
+            GL.Color4(Color4.Green);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(0f, 1f, 0f);
+            GL.Color4(Color4.Blue);
+            GL.Vertex3(0f, 0f, 0f);
+            GL.Vertex3(0f, 0f, 1f);
+            GL.End();
+   
+            //GL.DrawArraysInstanced(BeginMode.Quads,0,5
         }
         public void Unload()
         {

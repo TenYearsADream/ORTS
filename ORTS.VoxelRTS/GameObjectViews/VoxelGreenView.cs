@@ -18,7 +18,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
     {
         public bool Loaded { get; private set; }
         private int List;
-
+        private float halfsize = 0.5f;
         public VoxelGreenView()
         {
             this.Loaded = false;
@@ -33,40 +33,35 @@ namespace ORTS.VoxelRTS.GameObjectViews
             GL.Color3(Color.Green);
 
             GL.Begin(BeginMode.Quads);
-            GL.Vertex3(-0.5f, -0.5f, -0.5f);
-            GL.Vertex3(-0.5f, 0.5f, -0.5f);
-            GL.Vertex3(0.5f, 0.5f, -0.5f);
-            GL.Vertex3(0.5f, -0.5f, -0.5f);
+            GL.Vertex3(-halfsize, -halfsize, -halfsize);
+            GL.Vertex3(-halfsize, halfsize, -halfsize);
+            GL.Vertex3(halfsize, halfsize, -halfsize);
+            GL.Vertex3(halfsize, -halfsize, -halfsize);
 
-            GL.Color3(Color.Blue);
-            GL.Vertex3(-0.5f, -0.5f, -0.5f);
-            GL.Vertex3(0.5f, -0.5f, -0.5f);
-            GL.Vertex3(0.5f, -0.5f, 0.5f);
-            GL.Vertex3(-0.5f, -0.5f, 0.5f);
+            GL.Vertex3(-halfsize, -halfsize, -halfsize);
+            GL.Vertex3(halfsize, -halfsize, -halfsize);
+            GL.Vertex3(halfsize, -halfsize, halfsize);
+            GL.Vertex3(-halfsize, -halfsize, halfsize);
 
-            GL.Color3(Color.BurlyWood);
-            GL.Vertex3(-0.5f, -0.5f, -0.5f);
-            GL.Vertex3(-0.5f, -0.5f, 0.5f);
-            GL.Vertex3(-0.5f, 0.5f, 0.5f);
-            GL.Vertex3(-0.5f, 0.5f, -0.5f);
+            GL.Vertex3(-halfsize, -halfsize, -halfsize);
+            GL.Vertex3(-halfsize, -halfsize, halfsize);
+            GL.Vertex3(-halfsize, halfsize, halfsize);
+            GL.Vertex3(-halfsize, halfsize, -halfsize);
 
-            GL.Color3(Color.DarkBlue);
-            GL.Vertex3(-0.5f, -0.5f, 0.5f);
-            GL.Vertex3(0.5f, -0.5f, 0.5f);
-            GL.Vertex3(0.5f, 0.5f, 0.5f);
-            GL.Vertex3(-0.5f, 0.5f, 0.5f);
+            GL.Vertex3(-halfsize, -halfsize, halfsize);
+            GL.Vertex3(halfsize, -halfsize, halfsize);
+            GL.Vertex3(halfsize, halfsize, halfsize);
+            GL.Vertex3(-halfsize, halfsize, halfsize);
 
-            GL.Color3(Color.DarkOrchid);
-            GL.Vertex3(-0.5f, 0.5f, -0.5f);
-            GL.Vertex3(-0.5f, 0.5f, 0.5f);
-            GL.Vertex3(0.5f, 0.5f, 0.5f);
-            GL.Vertex3(0.5f, 0.5f, -0.5f);
+            GL.Vertex3(-halfsize, halfsize, -halfsize);
+            GL.Vertex3(-halfsize, halfsize, halfsize);
+            GL.Vertex3(halfsize, halfsize, halfsize);
+            GL.Vertex3(halfsize, halfsize, -halfsize);
 
-            GL.Color3(Color.DodgerBlue);
-            GL.Vertex3(0.5f, -0.5f, -0.5f);
-            GL.Vertex3(0.5f, 0.5f, -0.5f);
-            GL.Vertex3(0.5f, 0.5f, 0.5f);
-            GL.Vertex3(0.5f, -0.5f, 0.5f);
+            GL.Vertex3(halfsize, -halfsize, -halfsize);
+            GL.Vertex3(halfsize, halfsize, -halfsize);
+            GL.Vertex3(halfsize, halfsize, halfsize);
+            GL.Vertex3(halfsize, -halfsize, halfsize);
 
             GL.End();
             GL.EndList();

@@ -15,7 +15,7 @@ namespace ORTS.Core.Maths
             this.Angle = angle;
         }
         public Quat toQuat(){
-            Vect3 nvect = this.Axis.Normalize();
+            Vect3 nvect = this.Axis.Normalise();
             double sinAngle = Math.Sin(this.Angle.Radians * 0.5);
             return new Quat(nvect.X * sinAngle, nvect.Y * sinAngle, nvect.Z * sinAngle, Math.Cos(this.Angle.Radians * 0.5));
         }

@@ -5,59 +5,49 @@ using System.Text;
 using ORTS.Core.GameObject;
 using ORTS.Core.Timing;
 using ORTS.Core.Messaging;
+using ORTS.Core.Maths;
 
 namespace ORTS.VoxelRTS.GameObjects
 {
     class Planet : IGameObject, IHasVelocity, IHasAcceleration, IHasGeometry, IParent
     {
+
+        public MessageBus Bus { get; private set; }
+
+        public Vect3 Position { get; private set; }
+        public Vect3 Velocity { get; private set; }
+        public Vect3 Acceleration { get; private set; }
+
+        public Quat Rotation { get; private set; }
+        public Quat RotationalVelocity { get; private set; }
+        public Quat RotationalAcceleration { get; private set; }
+
+        public List<IGameObject> Children { get; private set; }
+        public Planet(MessageBus bus)
+        {
+            this.Bus = bus;
+            this.Children = new List<IGameObject>();
+
+
+            this.Position = new Vect3(2, 2, 2);
+            this.Velocity = new Vect3(0, 0, 0);
+            this.Acceleration = new Vect3(0, 0, 0);
+
+            this.Rotation = new Quat(Math.Sqrt(0.5), 0, 0, Math.Sqrt(0.5));
+            this.RotationalVelocity = new Euler(Angle.FromDegrees(1), Angle.FromDegrees(1), Angle.FromDegrees(1)).toQuat();
+        }
+
         public void Update(TickTime tickTime)
         {
-            throw new NotImplementedException();
+            
+            this.Rotation = this.Rotation * (this.RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds);
+            this.Position = this.Position + (this.Velocity * tickTime.GameTimeDelta.TotalSeconds);
         }
 
-        public MessageBus Bus
+        public void AddChild(IHasParent Child)
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Vect3 Velocity
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Quat RotationalVelocity
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Vect3 Position
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Quat Rotation
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Vect3 Acceleration
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Core.Maths.Quat RotationalAcceleration
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public List<IGameObject> Children
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public void AddChild(IGameObject Child)
-        {
-            throw new NotImplementedException();
+            Child.Parent = this;
+            Children.Add(Child);
         }
     }
 }

@@ -7,6 +7,6 @@ namespace ORTS.Core.GameObject
 {
     public interface IHasParent : IGameObject
     {
-        IParent Parent { get; }
+        IParent Parent { get; set; }
     }
 }

@@ -16,6 +16,9 @@ namespace ORTS.Core.OpenTKHelper
             keys.Add(Key.C, Keys.C);
             keys.Add(Key.D, Keys.D);
             keys.Add(Key.E, Keys.E);
+
+            keys.Add(Key.W, Keys.W);
+            keys.Add(Key.S, Keys.S);
             keys.Add(Key.Escape, Keys.Escape);
             keys.Add(Key.Space, Keys.Space);
         }

@@ -45,7 +45,7 @@ namespace ORTS.VoxelRTS
             }
             if (m.Key == Keys.A)
             {
-
+                engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(Planet)));
             }
 
 

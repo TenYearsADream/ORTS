@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="KeyMap.cs" />
+    <Compile Include="OpenTKCamera.cs" />
     <Compile Include="OpenTKGraphics.cs" />
     <Compile Include="OpenTKWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
