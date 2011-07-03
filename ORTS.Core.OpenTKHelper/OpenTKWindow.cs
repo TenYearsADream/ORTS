@@ -18,7 +18,7 @@ namespace ORTS.Core.OpenTKHelper
         public GameEngine Engine { get; private set; }
         public ConcurrentDictionary<Type,IGameObjectView> Views { get; private set; }
 
-        public OpenTKCamera camera { get; private set; }
+        public Camera camera { get; private set; }
 
         public OpenTKWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
@@ -45,8 +45,10 @@ namespace ORTS.Core.OpenTKHelper
 
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
 
-            camera = new OpenTKCamera();
+            camera = new Camera();
             camera.Translate(new Vect3(0, 0, 20));
+
+           // GL.Enable(EnableCap.Lighting);
 
         }
         public void LoadView(Type type, IGameObjectView View){
@@ -54,9 +56,22 @@ namespace ORTS.Core.OpenTKHelper
         }
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
             GL.ClearColor(new Color4(0.137f, 0.121f, 0.125f, 0f));
+            GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.DepthTest | EnableCap.PolygonSmooth);
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            {
+                if (!pair.Value.Loaded)
+                {
+                    pair.Value.Load();
+                    this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
+                }
+            }
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -68,6 +83,7 @@ namespace ORTS.Core.OpenTKHelper
             AxisAngle aa = camera.rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
+            /*
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);
@@ -79,7 +95,8 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 0f);
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
-
+            */
+            
             lock (this.Engine.Factory.GameObjectsLock)
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
@@ -95,24 +112,12 @@ namespace ORTS.Core.OpenTKHelper
                 }
             }
 
-
-
-
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
-            {
-                if (!pair.Value.Loaded)
-                {
-                    pair.Value.Load();
-                    this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
-                }
-            }
-
             if (Keyboard[Key.W])
             {
                 camera.Translate(new Vect3(0, 10f * e.Time, 0));
