@@ -12,6 +12,7 @@ using ORTS.Core.OpenTKHelper;
 using System.Windows.Forms;
 using ORTS.Core.GameObject;
 using ORTS.VoxelRTS.GameObjects;
+using ORTS.VoxelRTS.Messaging;
 
 namespace ORTS.VoxelRTS
 {
@@ -43,9 +44,10 @@ namespace ORTS.VoxelRTS
             {
                 engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(VoxelGreen)));
             }
-            if (m.Key == Keys.A)
+
+            if (m.Key == Keys.F)
             {
-                engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(Planet)));
+                engine.Bus.Add(new PlanetCreationRequest(engine.Timer.LastTickTime,PlanetType.Ice,11));
             }
 
 

@@ -62,6 +62,7 @@
     <Compile Include="GameObjects\VoxelGreen.cs" />
     <Compile Include="GameObjectViews\PlanetView.cs" />
     <Compile Include="GameObjectViews\VoxelGreenView.cs" />
+    <Compile Include="Messages\PlanetCreationRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoxelRTS.cs" />
@@ -79,10 +80,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Textures\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="GameObjectViews\test.jpg">
+    <Content Include="Textures\blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -73,18 +73,17 @@ namespace ORTS.VoxelRTS.GameObjects
             this.Velocity = new Vect3(0, 0, 0);//
             this.Acceleration = new Vect3(0, 0, 0);
 
-            this.Rotation = new Euler(Angle.FromDegrees(rnd.Next(0, 180)), Angle.FromDegrees(rnd.Next(0, 180)), Angle.FromDegrees(rnd.Next(0, 180))).toQuat();//new Quat(0, 0, Math.Sqrt(0.5), Math.Sqrt(0.5));
-            this.RotationalVelocity = new Euler(Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5))).toQuat();
+            this.Rotation = Quat.Identity;//new Euler(Angle.FromDegrees(rnd.Next(0, 180)), Angle.FromDegrees(rnd.Next(0, 180)), Angle.FromDegrees(rnd.Next(0, 180))).toQuat();//new Quat(0, 0, Math.Sqrt(0.5), Math.Sqrt(0.5));
+            this.RotationalVelocity = Quat.Identity;//new Euler(Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5)), Angle.FromDegrees(rnd.Next(-5, 5))).toQuat();
             
         }
 
-
         public void Update(TickTime tickTime)
         {
-            this.Rotation = this._rotation * (this.RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds);
-            if (Parent == null)
+            if (Parent != null)
             {
                 //Velocity = Velocity + (Acceleration * tickTime.GameTimeDelta.TotalSeconds);
+                this.Rotation = this._rotation * (this.RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds);
                 this._position = this._position + (this.Velocity * tickTime.GameTimeDelta.TotalSeconds);
             }
         }

@@ -9,6 +9,8 @@ using ORTS.Core.Maths;
 
 namespace ORTS.VoxelRTS.GameObjects
 {
+    public enum PlanetType { Ice };
+
     class Planet : IGameObject, IHasVelocity, IHasAcceleration, IHasGeometry, IParent
     {
 
@@ -28,8 +30,7 @@ namespace ORTS.VoxelRTS.GameObjects
             this.Bus = bus;
             this.Children = new List<IGameObject>();
 
-
-            this.Position = new Vect3(2, 2, 2);
+            this.Position = new Vect3(0, 0, 0);
             this.Velocity = new Vect3(0, 0, 0);
             this.Acceleration = new Vect3(0, 0, 0);
 
@@ -39,15 +40,15 @@ namespace ORTS.VoxelRTS.GameObjects
 
         public void Update(TickTime tickTime)
         {
-            
             this.Rotation = this.Rotation * (this.RotationalVelocity * tickTime.GameTimeDelta.TotalSeconds);
             this.Position = this.Position + (this.Velocity * tickTime.GameTimeDelta.TotalSeconds);
         }
 
         public void AddChild(IHasParent Child)
         {
-            Child.Parent = this;
             Children.Add(Child);
+            Child.Parent = this;
+            
         }
     }
 }

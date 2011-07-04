@@ -46,9 +46,8 @@ namespace ORTS.Core.OpenTKHelper
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
 
             camera = new Camera();
-            camera.Translate(new Vect3(0, 0, 20));
+            camera.Translate(new Vect3(0, 0, 30));
 
-           // GL.Enable(EnableCap.Lighting);
 
         }
         public void LoadView(Type type, IGameObjectView View){
@@ -57,8 +56,9 @@ namespace ORTS.Core.OpenTKHelper
         protected override void OnLoad(EventArgs e)
         {
             GL.ClearColor(new Color4(0.137f, 0.121f, 0.125f, 0f));
+            GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.DepthTest | EnableCap.PolygonSmooth);
+            GL.Enable(EnableCap.CullFace);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
@@ -70,8 +70,6 @@ namespace ORTS.Core.OpenTKHelper
                 }
             }
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -83,7 +81,6 @@ namespace ORTS.Core.OpenTKHelper
             AxisAngle aa = camera.rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
-            /*
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);
@@ -95,8 +92,7 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 0f);
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
-            */
-            
+            GL.Color4(Color4.White);
             lock (this.Engine.Factory.GameObjectsLock)
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
@@ -118,6 +114,8 @@ namespace ORTS.Core.OpenTKHelper
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
+
+
             if (Keyboard[Key.W])
             {
                 camera.Translate(new Vect3(0, 10f * e.Time, 0));
