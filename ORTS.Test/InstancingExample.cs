@@ -146,7 +146,7 @@ namespace ORTS.Test
             Matrix4 lookat = Matrix4.LookAt(0, 0, 50, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-
+            GL.UseProgram(0);
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);
@@ -160,12 +160,9 @@ namespace ORTS.Test
             GL.End();
             GL.Color4(Color4.White);
 
-            
-
             GL.UseProgram(shaderProgram);
             GL.BindVertexArray(square_vao);
             GL.DrawArraysInstanced(BeginMode.TriangleFan, 0, 4, 4);
-
 
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time);
             this.SwapBuffers();
