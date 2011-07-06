@@ -10,9 +10,9 @@ namespace ORTS.Test
     {
         static void Main(string[] args)
         {
-            using (ORTSTest test = new ORTSTest())
+            using (InstancingExample test = new InstancingExample())
             {
-
+                test.Run();
             }
         }
     }

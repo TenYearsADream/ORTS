@@ -48,35 +48,59 @@ namespace ORTS.VoxelRTS.GameObjectViews
             GL.Begin(BeginMode.Quads);
 
             //Front Face
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(-size, -size, size);
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(size, -size, size);
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(size, size, size);
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(-size, size, size);
+            GL.TexCoord2(0.0, 0.0); 
+            GL.Vertex3(-size, -size, size);
+            GL.TexCoord2(1.0, 0.0); 
+            GL.Vertex3(size, -size, size);
+            GL.TexCoord2(1.0, 1.0);
+            GL.Vertex3(size, size, size);
+            GL.TexCoord2(0.0, 1.0); 
+            GL.Vertex3(-size, size, size);
             //Back Face
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(-size, size, -size);
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(size, size, -size);
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(size, -size, -size);
+            GL.TexCoord2(1.0, 0.0); 
+            GL.Vertex3(-size, -size, -size);
+            GL.TexCoord2(1.0, 1.0); 
+            GL.Vertex3(-size, size, -size);
+            GL.TexCoord2(0.0, 1.0);
+            GL.Vertex3(size, size, -size);
+            GL.TexCoord2(0.0, 0.0);
+            GL.Vertex3(size, -size, -size);
             //Top Face
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(-size, size, -size);
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(-size, size, size);
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(size, size, size);
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(size, size, -size);
+            GL.TexCoord2(0.0, 1.0); 
+            GL.Vertex3(-size, size, -size);
+            GL.TexCoord2(0.0, 0.0);
+            GL.Vertex3(-size, size, size);
+            GL.TexCoord2(1.0, 0.0);
+            GL.Vertex3(size, size, size);
+            GL.TexCoord2(1.0, 1.0);
+            GL.Vertex3(size, size, -size);
             //Bottom Face
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(size, -size, -size);
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(size, -size, size);
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(-size, -size, size);
+            GL.TexCoord2(1.0, 1.0); 
+            GL.Vertex3(-size, -size, -size);
+            GL.TexCoord2(0.0, 1.0); 
+            GL.Vertex3(size, -size, -size);
+            GL.TexCoord2(0.0, 0.0); 
+            GL.Vertex3(size, -size, size);
+            GL.TexCoord2(1.0, 0.0); 
+            GL.Vertex3(-size, -size, size);
             //Right Face
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(size, -size, -size);
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(size, size, -size);
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(size, size, size);
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(size, -size, size);
+            GL.TexCoord2(1.0, 0.0);
+            GL.Vertex3(size, -size, -size);
+            GL.TexCoord2(1.0, 1.0);
+            GL.Vertex3(size, size, -size);
+            GL.TexCoord2(0.0, 1.0); 
+            GL.Vertex3(size, size, size);
+            GL.TexCoord2(0.0, 0.0);
+            GL.Vertex3(size, -size, size);
             //Left Face
-            GL.TexCoord2(0.0, 0.0); GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(1.0, 0.0); GL.Vertex3(-size, -size, size);
-            GL.TexCoord2(1.0, 1.0); GL.Vertex3(-size, size, size);
-            GL.TexCoord2(0.0, 1.0); GL.Vertex3(-size, size, -size);
+            GL.TexCoord2(0.0, 0.0);
+            GL.Vertex3(-size, -size, -size);
+            GL.TexCoord2(1.0, 0.0); 
+            GL.Vertex3(-size, -size, size);
+            GL.TexCoord2(1.0, 1.0); 
+            GL.Vertex3(-size, size, size);
+            GL.TexCoord2(0.0, 1.0); 
+            GL.Vertex3(-size, size, -size);
             GL.End();
             GL.EndList();
             this.Loaded = true;
