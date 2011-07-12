@@ -10,26 +10,29 @@ using ORTS.Core.GameObject;
 using ORTS.Core.Graphics;
 using ORTS.Core.Messaging;
 using ORTS.Core.Maths;
+using ORTS.VoxelRTS.GameObjectViews;
 
 namespace ORTS.Core.OpenTKHelper
 {
-    public class OpenTKWindow : GameWindow
+    public class VoxelRTSWindow : GameWindow
     {
         public GameEngine Engine { get; private set; }
         public ConcurrentDictionary<Type,IGameObjectView> Views { get; private set; }
 
         public Camera camera { get; private set; }
 
-        public OpenTKWindow(GameEngine engine)
+        VoxelView voxelview;
+
+        public VoxelRTSWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
-            VSync = VSyncMode.Off;
+            VSync = VSyncMode.On;
             Views= new ConcurrentDictionary<Type,IGameObjectView>();
             this.Engine = engine;
 
             this.Engine.Bus.OfType<LoadObjectView>().Subscribe(m => Views.TryAdd(m.GameObjectType,m.View));
 
-            VSync = VSyncMode.Off;
+
             KeyMap map = new KeyMap();
 
             Keyboard.KeyDown += (object sender, KeyboardKeyEventArgs e) => { 
@@ -47,8 +50,6 @@ namespace ORTS.Core.OpenTKHelper
 
             camera = new Camera();
             camera.Translate(new Vect3(0, 0, 30));
-
-
         }
         public void LoadView(Type type, IGameObjectView View){
             Views.TryAdd(type, View);
@@ -59,6 +60,8 @@ namespace ORTS.Core.OpenTKHelper
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
@@ -69,8 +72,10 @@ namespace ORTS.Core.OpenTKHelper
                     this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
                 }
             }
-
+           voxelview = new VoxelView();
         }
+
+        
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -93,6 +98,7 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
             GL.Color4(Color4.White);
+
             lock (this.Engine.Factory.GameObjectsLock)
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
@@ -104,10 +110,11 @@ namespace ORTS.Core.OpenTKHelper
                         this.Views[go.GetType()].Render(go as IHasGeometry);
                         GL.PopMatrix();
                     }
-                    
                 }
             }
-
+            GL.PushMatrix();
+            this.voxelview.Render();
+            GL.PopMatrix();
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }

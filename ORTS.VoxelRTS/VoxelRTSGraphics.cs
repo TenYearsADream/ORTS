@@ -6,6 +6,7 @@ using ORTS.Core.OpenTKHelper;
 using ORTS.Core.Messaging;
 using ORTS.VoxelRTS.GameObjects;
 using ORTS.VoxelRTS.GameObjectViews;
+using ORTS.Core;
 
 namespace ORTS.VoxelRTS
 {
@@ -16,7 +17,16 @@ namespace ORTS.VoxelRTS
         {
 
         }
-        public override void LoadViews(OpenTKWindow p)
+        public override void Start(GameEngine engine)
+        {
+            Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "VoxelRTS Graphics starting."));
+            using (VoxelRTSWindow p = new VoxelRTSWindow(engine))
+            {
+                LoadViews(p);
+                p.Run();
+            }
+        }
+        public void LoadViews(VoxelRTSWindow p)
         {
             p.LoadView(typeof(VoxelGreen), new VoxelGreenView());
             p.LoadView(typeof(Planet), new PlanetView());

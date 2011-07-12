@@ -105,24 +105,27 @@ namespace ORTS.Test
             if (fragHandle != 0)
                 GL.DeleteShader(fragHandle);
 
+            
+
+            int square_vertices_size = square_vertices.Length * sizeof(float);
+            int instance_colours_size = instance_colours.Length * sizeof(float);
+            int instance_positions_size =instance_positions.Length * sizeof(float);
             int offset = 0;
             GL.GenVertexArrays(1, out square_vao);
             GL.GenBuffers(1, out square_vbo);
             GL.BindVertexArray(square_vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, square_vbo);
 
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)((square_vertices.Length * sizeof(float)) + (instance_colours.Length * sizeof(float)) + (instance_positions.Length * sizeof(float))), (IntPtr)null, BufferUsageHint.StaticDraw);
-
-            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)(square_vertices.Length * sizeof(float)), square_vertices);
-            offset += (square_vertices.Length * sizeof(float));
-            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)(instance_colours.Length * sizeof(float)), instance_colours);
-            offset += (instance_colours.Length * sizeof(float));
-            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)(instance_positions.Length * sizeof(float)), instance_positions);
-            offset += (instance_positions.Length * sizeof(float));
+            GL.BufferData<float>(BufferTarget.ArrayBuffer, (IntPtr)(square_vertices_size + instance_colours_size + instance_positions_size), new float[]{}, BufferUsageHint.StaticDraw);
+            GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)square_vertices_size, square_vertices);
+            offset += square_vertices_size;
+            GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)instance_colours_size, instance_colours);
+            offset += instance_colours_size;
+            GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)instance_positions_size, instance_positions);
 
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, (square_vertices.Length * sizeof(float)));
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, (square_vertices.Length * sizeof(float)) + (instance_colours.Length * sizeof(float)));
+            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, square_vertices_size);
+            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, square_vertices_size + instance_colours_size);
 
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
@@ -146,7 +149,7 @@ namespace ORTS.Test
             Matrix4 lookat = Matrix4.LookAt(0, 0, 50, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-            GL.UseProgram(0);
+            
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);
@@ -163,6 +166,7 @@ namespace ORTS.Test
             GL.UseProgram(shaderProgram);
             GL.BindVertexArray(square_vao);
             GL.DrawArraysInstanced(BeginMode.TriangleFan, 0, 4, 4);
+            GL.UseProgram(0);
 
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time);
             this.SwapBuffers();

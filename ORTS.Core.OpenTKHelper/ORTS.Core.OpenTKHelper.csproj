@@ -57,6 +57,7 @@
     <Compile Include="OpenTKGraphics.cs" />
     <Compile Include="OpenTKWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShaderProgram.cs" />
     <Compile Include="TextWriter.cs" />
     <Compile Include="TKHelper.cs" />
   </ItemGroup>

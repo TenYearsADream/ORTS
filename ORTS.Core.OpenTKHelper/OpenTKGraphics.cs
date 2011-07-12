@@ -16,7 +16,7 @@ namespace ORTS.Core.OpenTKHelper
             this.Bus = bus;
             
         }
-        public void Start(GameEngine engine)
+        public virtual void Start(GameEngine engine)
         {
             Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "Graphics starting."));
             using (OpenTKWindow p = new OpenTKWindow(engine))
