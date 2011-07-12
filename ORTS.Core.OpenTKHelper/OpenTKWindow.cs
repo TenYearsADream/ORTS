@@ -28,8 +28,6 @@ namespace ORTS.Core.OpenTKHelper
             this.Engine = engine;
 
             this.Engine.Bus.OfType<LoadObjectView>().Subscribe(m => Views.TryAdd(m.GameObjectType,m.View));
-
-            VSync = VSyncMode.Off;
             KeyMap map = new KeyMap();
 
             Keyboard.KeyDown += (object sender, KeyboardKeyEventArgs e) => { 

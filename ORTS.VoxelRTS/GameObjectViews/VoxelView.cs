@@ -16,88 +16,67 @@ namespace ORTS.VoxelRTS.GameObjectViews
 {
     public class VoxelView
     {
+        
+        float size = 0.5f;
+
         //X,Y,Z
-        readonly float size = 0.5f;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private float[] square_vertices;
 
-        //R,G,B,A
-        private float[] instance_colours = new float[]{
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 0.0f, 1.0f
-        };
-        //X,Y,Z
-        private float[] instance_positions = new float[]{
-            -2.0f, -2.0f, 0.0f,
-             2.0f, -2.0f, 0.0f,
-             2.0f,  2.0f, 6.0f,
-            -2.0f,  2.0f, 0.0f
-        };
+        private static int number = 1600;
 
+        //R,G,B,A
+        private float[] instance_colours = new float[number*4];
+        //X,Y,Z
+        private float[] instance_positions = new float[number*3];
 
         private ShaderProgram shader;
         int square_vao, square_vbo;
         public VoxelView()
         {
             square_vertices = new float[]{
-            //-1.0f, -1.0f, 0.0f,
-            // 1.0f, -1.0f, 0.0f,
-            // 1.0f,  1.0f, 0.0f,
-            //-1.0f,  1.0f, 0.0f
-            //Front Face
--size, -size, size,
-size, -size, size,
-size, size, size,
--size, size, size,
-//Back Face
--size, -size, -size,
--size, size, -size,
-size, size, -size,
-size, -size, -size,
-//Top Face
--size, size, -size,
--size, size, size,
-size, size, size,
-size, size, -size,
-//Bottom Face
--size, -size, -size,
-size, -size, -size,
-size, -size, size,
--size, -size, size,
-//Right Face
-size, -size, -size,
-size, size, -size,
-size, size, size,
-size, -size, size,
-//Left Face
--size, -size, -size,
--size, -size, size,
--size, size, size,
--size, size, -size,
-        };
-
-
-
-
-
-
-
+                //Front Face
+                -size, -size, size,
+                size, -size, size,
+                size, size, size,
+                -size, size, size,
+                //Back Face
+                -size, -size, -size,
+                -size, size, -size,
+                size, size, -size,
+                size, -size, -size,
+                //Top Face
+                -size, size, -size,
+                -size, size, size,
+                size, size, size,
+                size, size, -size,
+                //Bottom Face
+                -size, -size, -size,
+                size, -size, -size,
+                size, -size, size,
+                -size, -size, size,
+                //Right Face
+                size, -size, -size,
+                size, size, -size,
+                size, size, size,
+                size, -size, size,
+                //Left Face
+                -size, -size, -size,
+                -size, -size, size,
+                -size, size, size,
+                -size, size, -size
+            };
+            
+            Random rnd = new Random();
+            for (int i = 0; i < number; i++)
+            {
+                instance_positions[(i * 3)] = (float)(rnd.Next(-20, 20));
+                instance_positions[(i * 3) + 1] = (float)(rnd.Next(-20, 20));
+                instance_positions[(i * 3) + 2] = (float)(rnd.Next(-20, 20));
+                instance_colours[(i * 4)] = (float)rnd.NextDouble();
+                instance_colours[(i * 4) + 1] = (float)rnd.NextDouble();
+                instance_colours[(i * 4) + 2] = (float)rnd.NextDouble();
+                instance_colours[(i * 4) + 3] = 0.5f;
+            }
 
             shader = new ShaderProgram();
             shader.OnMessage += new ShaderMessageEventHandler(shader_OnMessage);
@@ -118,12 +97,16 @@ size, -size, size,
             int instance_positions_size = instance_positions.Length * sizeof(float);
 
             int offset = 0;
+            
+
             GL.GenVertexArrays(1, out square_vao);
             GL.GenBuffers(1, out square_vbo);
             GL.BindVertexArray(square_vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, square_vbo);
 
-            GL.BufferData<float>(BufferTarget.ArrayBuffer, (IntPtr)(square_vertices_size + instance_colours_size + instance_positions_size), new float[] { }, BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, square_vbo);
+            Console.WriteLine(square_vertices_size + instance_colours_size + instance_positions_size);
+            GL.BufferData<float>(BufferTarget.ArrayBuffer, (IntPtr)(square_vertices_size + instance_colours_size + instance_positions_size), new float[] { }, BufferUsageHint.DynamicDraw);
+
             GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)square_vertices_size, square_vertices);
             offset += square_vertices_size;
             GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)instance_colours_size, instance_colours);
@@ -150,7 +133,7 @@ size, -size, size,
         public void Render(){
             shader.Enable();
             GL.BindVertexArray(square_vao);
-            GL.DrawArraysInstanced(BeginMode.Quads, 0, 4*6, instance_positions.Length / 3);
+            GL.DrawArraysInstanced(BeginMode.Quads, 0, 4*6, number);
             shader.Disable();
         }
     }

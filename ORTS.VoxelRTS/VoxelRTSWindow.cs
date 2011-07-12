@@ -26,7 +26,7 @@ namespace ORTS.Core.OpenTKHelper
         public VoxelRTSWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
-            VSync = VSyncMode.On;
+            VSync = VSyncMode.Off;
             Views= new ConcurrentDictionary<Type,IGameObjectView>();
             this.Engine = engine;
 
