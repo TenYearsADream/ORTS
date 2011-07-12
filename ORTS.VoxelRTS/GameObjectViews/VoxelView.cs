@@ -22,7 +22,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
         //X,Y,Z
         private float[] square_vertices;
 
-        private static int number = 1600;
+        private static int number = 500000;
 
         //R,G,B,A
         private float[] instance_colours = new float[number*4];
@@ -69,13 +69,13 @@ namespace ORTS.VoxelRTS.GameObjectViews
             Random rnd = new Random();
             for (int i = 0; i < number; i++)
             {
-                instance_positions[(i * 3)] = (float)(rnd.Next(-20, 20));
-                instance_positions[(i * 3) + 1] = (float)(rnd.Next(-20, 20));
-                instance_positions[(i * 3) + 2] = (float)(rnd.Next(-20, 20));
+                instance_positions[(i * 3)] = (float)(rnd.Next(-50, 50));
+                instance_positions[(i * 3) + 1] = (float)(rnd.Next(-50, 50));
+                instance_positions[(i * 3) + 2] = (float)(rnd.Next(-50, 50));
                 instance_colours[(i * 4)] = (float)rnd.NextDouble();
                 instance_colours[(i * 4) + 1] = (float)rnd.NextDouble();
                 instance_colours[(i * 4) + 2] = (float)rnd.NextDouble();
-                instance_colours[(i * 4) + 3] = 0.5f;
+                instance_colours[(i * 4) + 3] = 0.4f;
             }
 
             shader = new ShaderProgram();
@@ -92,9 +92,9 @@ namespace ORTS.VoxelRTS.GameObjectViews
             GL.BindAttribLocation(shader.shaderProgram, 1, "instance_color");
             GL.BindAttribLocation(shader.shaderProgram, 2, "instance_position");
             shader.Link();
-            int square_vertices_size = square_vertices.Length * sizeof(float);
-            int instance_colours_size = instance_colours.Length * sizeof(float);
-            int instance_positions_size = instance_positions.Length * sizeof(float);
+            int square_vertices_size = square_vertices.Length * 4; 
+            int instance_colours_size = instance_colours.Length * 4;
+            int instance_positions_size = instance_positions.Length * 4;
 
             int offset = 0;
             
@@ -105,14 +105,18 @@ namespace ORTS.VoxelRTS.GameObjectViews
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, square_vbo);
             Console.WriteLine(square_vertices_size + instance_colours_size + instance_positions_size);
-            GL.BufferData<float>(BufferTarget.ArrayBuffer, (IntPtr)(square_vertices_size + instance_colours_size + instance_positions_size), new float[] { }, BufferUsageHint.DynamicDraw);
 
+
+            var data = (square_vertices.Concat(instance_colours)).Concat(instance_positions).ToArray();
+
+            GL.BufferData<float>(BufferTarget.ArrayBuffer, (IntPtr)(square_vertices_size + instance_colours_size + instance_positions_size), data, BufferUsageHint.DynamicDraw);
+            /*
             GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)square_vertices_size, square_vertices);
             offset += square_vertices_size;
             GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)instance_colours_size, instance_colours);
             offset += instance_colours_size;
             GL.BufferSubData<float>(BufferTarget.ArrayBuffer, (IntPtr)offset, (IntPtr)instance_positions_size, instance_positions);
-
+            */
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, square_vertices_size);
             GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, square_vertices_size + instance_colours_size);

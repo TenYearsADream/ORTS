@@ -22,7 +22,6 @@ namespace ORTS.Core.OpenTKHelper
         public Camera camera { get; private set; }
 
         VoxelView voxelview;
-
         public VoxelRTSWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
@@ -72,7 +71,10 @@ namespace ORTS.Core.OpenTKHelper
                     this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
                 }
             }
-           voxelview = new VoxelView();
+            voxelview = new VoxelView();
+
+
+
         }
 
         
@@ -86,6 +88,7 @@ namespace ORTS.Core.OpenTKHelper
             AxisAngle aa = camera.rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
+            /*
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);
@@ -98,7 +101,7 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
             GL.Color4(Color4.White);
-
+            
             lock (this.Engine.Factory.GameObjectsLock)
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
@@ -112,9 +115,9 @@ namespace ORTS.Core.OpenTKHelper
                     }
                 }
             }
-            GL.PushMatrix();
+            */
             this.voxelview.Render();
-            GL.PopMatrix();
+
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }
@@ -150,7 +153,7 @@ namespace ORTS.Core.OpenTKHelper
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 1, 128);
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 1, 512);
             GL.LoadMatrix(ref perspective);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
