@@ -1,123 +1,182 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ORTS.Core.Graphics;
-using OpenTK.Graphics;
+using System.IO;
 using OpenTK.Graphics.OpenGL;
-using ORTS.Core.OpenTKHelper;
 using ORTS.Core.GameObject;
-using System.Drawing;
-using ORTS.Core.Maths;
-using OpenTK;
+using ORTS.Core.Graphics;
+using ORTS.Core.OpenTKHelper;
+using ORTS.VoxelRTS.GameObjects;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Runtime.InteropServices;
-using System.Drawing.Imaging;
-
 namespace ORTS.VoxelRTS.GameObjectViews
 {
     class VoxelGreenView : IGameObjectView
     {
         public bool Loaded { get; private set; }
-        private int List;
         private float size = 0.5f;
-        private int texture;
+
+        private ShaderProgram shader;
+        private int square_vao, square_vbo;
+        private float[] square_vertices;
+        private int count = 0;
+
+        private int floatsize = sizeof(float);
 
         public VoxelGreenView()
         {
             this.Loaded = false;
-
         }
 
         public void Load()
         {
+            square_vertices = new float[]{
+                //Front Face
+                -size, -size, size,
+                size, -size, size,
+                size, size, size,
+                -size, size, size,
+                //Back Face
+                -size, -size, -size,
+                -size, size, -size,
+                size, size, -size,
+                size, -size, -size,
+                //Top Face
+                -size, size, -size,
+                -size, size, size,
+                size, size, size,
+                size, size, -size,
+                //Bottom Face
+                -size, -size, -size,
+                size, -size, -size,
+                size, -size, size,
+                -size, -size, size,
+                //Right Face
+                size, -size, -size,
+                size, size, -size,
+                size, size, size,
+                size, -size, size,
+                //Left Face
+                -size, -size, -size,
+                -size, -size, size,
+                -size, size, size,
+                -size, size, -size
+            };
+            shader = new ShaderProgram();
+            using (StreamReader sr = new StreamReader("Shaders/Voxel.Vert"))
+            {
+                shader.AddShader(ShaderType.VertexShader, sr.ReadToEnd());
+            }
+            using (StreamReader sr = new StreamReader("Shaders/VoxelGreen.Frag"))
+            {
+                shader.AddShader(ShaderType.FragmentShader, sr.ReadToEnd());
+            }
+            GL.BindAttribLocation(shader.shaderProgram, 0, "position");
+            GL.BindAttribLocation(shader.shaderProgram, 1, "instance_position");
+            GL.BindAttribLocation(shader.shaderProgram, 2, "instance_rotation");
 
-            Bitmap bitmap = new Bitmap("Textures/blue.png");
-            GL.GenTextures(1, out texture);
-            GL.BindTexture(TextureTarget.Texture2D, texture);
-            BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-            bitmap.UnlockBits(data);
-            bitmap.Dispose();
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            shader.Link();
+            GL.GenVertexArrays(1, out square_vao);
+            GL.GenBuffers(1, out square_vbo);
 
-            List = GL.GenLists(1);
-            GL.NewList(List, ListMode.Compile);
-            GL.BindTexture(TextureTarget.Texture2D, texture);
-            GL.Color3(Color.White);
-            GL.Begin(BeginMode.Quads);
 
-            //Front Face
-            GL.TexCoord2(0.0, 0.0); 
-            GL.Vertex3(-size, -size, size);
-            GL.TexCoord2(1.0, 0.0); 
-            GL.Vertex3(size, -size, size);
-            GL.TexCoord2(1.0, 1.0);
-            GL.Vertex3(size, size, size);
-            GL.TexCoord2(0.0, 1.0); 
-            GL.Vertex3(-size, size, size);
-            //Back Face
-            GL.TexCoord2(1.0, 0.0); 
-            GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(1.0, 1.0); 
-            GL.Vertex3(-size, size, -size);
-            GL.TexCoord2(0.0, 1.0);
-            GL.Vertex3(size, size, -size);
-            GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(size, -size, -size);
-            //Top Face
-            GL.TexCoord2(0.0, 1.0); 
-            GL.Vertex3(-size, size, -size);
-            GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(-size, size, size);
-            GL.TexCoord2(1.0, 0.0);
-            GL.Vertex3(size, size, size);
-            GL.TexCoord2(1.0, 1.0);
-            GL.Vertex3(size, size, -size);
-            //Bottom Face
-            GL.TexCoord2(1.0, 1.0); 
-            GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(0.0, 1.0); 
-            GL.Vertex3(size, -size, -size);
-            GL.TexCoord2(0.0, 0.0); 
-            GL.Vertex3(size, -size, size);
-            GL.TexCoord2(1.0, 0.0); 
-            GL.Vertex3(-size, -size, size);
-            //Right Face
-            GL.TexCoord2(1.0, 0.0);
-            GL.Vertex3(size, -size, -size);
-            GL.TexCoord2(1.0, 1.0);
-            GL.Vertex3(size, size, -size);
-            GL.TexCoord2(0.0, 1.0); 
-            GL.Vertex3(size, size, size);
-            GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(size, -size, size);
-            //Left Face
-            GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(-size, -size, -size);
-            GL.TexCoord2(1.0, 0.0); 
-            GL.Vertex3(-size, -size, size);
-            GL.TexCoord2(1.0, 1.0); 
-            GL.Vertex3(-size, size, size);
-            GL.TexCoord2(0.0, 1.0); 
-            GL.Vertex3(-size, size, -size);
-            GL.End();
-            GL.EndList();
             this.Loaded = true;
         }
 
-
+        /*
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
             AxisAngle aa = GameObject.Rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
-            GL.CallList(List);
-        }
+           // GL.CallList(List);
+        }*/
         public void Unload()
         {
-            GL.DeleteLists(List, 1);
-            GL.DeleteTextures(1, ref texture);
+           // GL.DeleteLists(List, 1);
+           // GL.DeleteTextures(1, ref texture);
+            
+        }
+        
+        private List<VoxelGreen> list = new List<VoxelGreen>();
+        public void Add(IGameObject GameObject)
+        {
+            list.Add(GameObject as VoxelGreen);
+        }
+
+
+        IntPtr positionmemIntPtr;
+        IntPtr rotationmemIntPtr;
+        public void Update()
+        {
+            count = list.Count;
+            int positionstreamlength = count * 3 * sizeof(float);
+            int rotationstreamlength = count * 4 * sizeof(float);
+            unsafe
+            {
+                positionmemIntPtr = Marshal.AllocHGlobal(positionstreamlength);
+                UnmanagedMemoryStream positionmemstream = new UnmanagedMemoryStream((byte*)positionmemIntPtr.ToPointer(), positionstreamlength, positionstreamlength, FileAccess.Write);
+                BinaryWriter position_memstream_writer = new BinaryWriter(positionmemstream);
+
+                rotationmemIntPtr = Marshal.AllocHGlobal(rotationstreamlength);
+                UnmanagedMemoryStream rotationmemstream = new UnmanagedMemoryStream((byte*)rotationmemIntPtr.ToPointer(), rotationstreamlength, rotationstreamlength, FileAccess.Write);
+                BinaryWriter rotation_memstream_writer = new BinaryWriter(rotationmemstream);
+
+                //W,X,Y,Z
+
+                foreach (VoxelGreen voxel in list)
+                {
+                    position_memstream_writer.Write((float)voxel.Position.X);
+                    position_memstream_writer.Write((float)voxel.Position.Y);
+                    position_memstream_writer.Write((float)voxel.Position.Z);
+
+                    rotation_memstream_writer.Write((float)voxel.Rotation.X);
+                    rotation_memstream_writer.Write((float)voxel.Rotation.Y);
+                    rotation_memstream_writer.Write((float)voxel.Rotation.Z);
+                    rotation_memstream_writer.Write((float)voxel.Rotation.W);
+                }
+                position_memstream_writer.Close();
+                rotation_memstream_writer.Close();
+
+                GL.BindVertexArray(square_vao);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, square_vbo);
+                GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr((square_vertices.Length) * 4 + positionstreamlength + rotationstreamlength), IntPtr.Zero, BufferUsageHint.StreamDraw);
+
+                GL.BufferSubData<float>(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(square_vertices.Length * 4), square_vertices);
+                GL.BufferSubData(BufferTarget.ArrayBuffer, new IntPtr(square_vertices.Length * 4), new IntPtr(positionstreamlength), positionmemIntPtr);
+
+                GL.BufferSubData(BufferTarget.ArrayBuffer, new IntPtr(square_vertices.Length * 4 + positionstreamlength), new IntPtr(rotationstreamlength), rotationmemIntPtr);
+
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, square_vertices.Length * 4);
+                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, square_vertices.Length * 4 + positionstreamlength);
+                GL.EnableVertexAttribArray(0);
+                GL.EnableVertexAttribArray(1);
+                GL.EnableVertexAttribArray(2);
+                GL.Arb.VertexAttribDivisor(1, 1);
+                GL.Arb.VertexAttribDivisor(2, 1);
+                list.Clear();
+
+                positionmemstream.Close();
+                rotationmemstream.Close();
+                Marshal.FreeHGlobal(positionmemIntPtr);
+                Marshal.FreeHGlobal(rotationmemIntPtr);
+            }
+
+
+
+
+            
+        }
+
+        public void Render()
+        {
+            shader.Enable();
+            GL.PushMatrix();
+            GL.BindVertexArray(square_vao);
+            GL.DrawArraysInstanced(BeginMode.Quads, 0, 4 * 6, count);
+            GL.PopMatrix();
+            shader.Disable();
         }
     }
 }

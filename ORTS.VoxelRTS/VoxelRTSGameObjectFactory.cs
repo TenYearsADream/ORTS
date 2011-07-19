@@ -12,6 +12,7 @@ namespace ORTS.VoxelRTS
 {
     public class VoxelRTSGameObjectFactory: GameObjectFactory
     {
+        private int IDTally = 1;
         public VoxelRTSGameObjectFactory(MessageBus bus)
             : base(bus)
         {
@@ -37,7 +38,7 @@ namespace ORTS.VoxelRTS
                         {
                             if ((Math.Pow(x - (request.PlanetSize - 1) / 2.0, 2) + Math.Pow(y - (request.PlanetSize - 1) / 2.0, 2) + Math.Pow(z - (request.PlanetSize - 1) / 2.0, 2) - Math.Pow(request.PlanetSize / 2.0, 2)) <= 0)
                             {
-                                VoxelGreen child = new VoxelGreen(this.Bus)
+                                VoxelGreen child = new VoxelGreen(IDTally++, this.Bus)
                                 {
                                     Position = new Vect3(x,y,z)
                                 };
@@ -55,7 +56,7 @@ namespace ORTS.VoxelRTS
         {
             if (request.ObjectType == typeof(VoxelGreen))
             {
-                var item = new VoxelGreen(this.Bus);
+                var item = new VoxelGreen(IDTally++, this.Bus);
                 lock (this.GameObjectsLock)
                 {
                     this.GameObjects.Add(item);

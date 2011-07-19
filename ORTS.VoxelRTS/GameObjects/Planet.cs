@@ -11,11 +11,11 @@ namespace ORTS.VoxelRTS.GameObjects
 {
     public enum PlanetType { Ice };
 
-    class Planet : IGameObject, IHasVelocity, IHasAcceleration, IHasGeometry, IParent
+    class Planet : IGameObject, IHasVelocity, IHasAcceleration, IParent
     {
 
         public MessageBus Bus { get; private set; }
-
+        public int ID { get; private set; }
         public Vect3 Position { get; private set; }
         public Vect3 Velocity { get; private set; }
         public Vect3 Acceleration { get; private set; }

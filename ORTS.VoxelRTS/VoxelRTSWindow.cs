@@ -11,6 +11,7 @@ using ORTS.Core.Graphics;
 using ORTS.Core.Messaging;
 using ORTS.Core.Maths;
 using ORTS.VoxelRTS.GameObjectViews;
+using ORTS.VoxelRTS.GameObjects;
 
 namespace ORTS.Core.OpenTKHelper
 {
@@ -21,7 +22,6 @@ namespace ORTS.Core.OpenTKHelper
 
         public Camera camera { get; private set; }
 
-        VoxelView voxelview;
         public VoxelRTSWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
@@ -71,10 +71,6 @@ namespace ORTS.Core.OpenTKHelper
                     this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
                 }
             }
-            voxelview = new VoxelView();
-
-
-
         }
 
         
@@ -87,6 +83,12 @@ namespace ORTS.Core.OpenTKHelper
             GL.Translate(camera.postion.ToVector3());
             AxisAngle aa = camera.rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
+
+
+            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            {
+                pair.Value.Render();
+            }
 
             /*
             GL.Begin(BeginMode.Lines);
@@ -102,22 +104,8 @@ namespace ORTS.Core.OpenTKHelper
             GL.End();
             GL.Color4(Color4.White);
             
-            lock (this.Engine.Factory.GameObjectsLock)
-            {
-                foreach (IGameObject go in this.Engine.Factory.GameObjects)
-                {
-                    
-                    if (go is IHasGeometry && this.Views.ContainsKey(go.GetType()))
-                    {
-                        GL.PushMatrix();
-                        this.Views[go.GetType()].Render(go as IHasGeometry);
-                        GL.PopMatrix();
-                    }
-                }
-            }
-            */
-            this.voxelview.Render();
 
+            */
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }
@@ -139,11 +127,27 @@ namespace ORTS.Core.OpenTKHelper
             if (Keyboard[Key.A])
             {
                 camera.Translate(new Vect3(-10f * e.Time,0, 0));
+                Engine.Bus.Add(new ObjectCreationRequest(Engine.Timer.LastTickTime, typeof(VoxelGreen)));
             }
 
             if (Keyboard[Key.D])
             {
                 camera.Translate(new Vect3(10f * e.Time, 0, 0));
+            }
+
+            lock (this.Engine.Factory.GameObjectsLock)
+            {
+                foreach (IGameObject go in this.Engine.Factory.GameObjects)
+                {
+                    if (this.Views.ContainsKey(go.GetType()))
+                    {
+                        this.Views[go.GetType()].Add(go);
+                    }
+                }
+            }
+            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            {
+                pair.Value.Update();
             }
         }
         protected override void OnResize(EventArgs e)
@@ -160,6 +164,10 @@ namespace ORTS.Core.OpenTKHelper
         }
         protected override void OnUnload(EventArgs e)
         {
+            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            {
+                pair.Value.Unload();
+            }
             base.OnUnload(e);
         }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

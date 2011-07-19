@@ -37,10 +37,15 @@ namespace ORTS.Core
         {
             lock (Factory.GameObjectsLock)
             {
+                Parallel.ForEach<IGameObject>(Factory.GameObjects, gameobject =>
+                {
+                    gameobject.Update(tickTime);
+                });
+                /*
                 foreach (IGameObject gameobject in Factory.GameObjects)
                 {
                     gameobject.Update(tickTime);
-                }
+                }*/
             }
         }
 
@@ -53,9 +58,7 @@ namespace ORTS.Core
                 IsRunning = true;
                 Bus.Add(new SystemMessage(Timer.LastTickTime, "Engine started."));
 
-
                 GraphicsTask = new Task(() => this.Graphics.Start(this));
-                
                 GraphicsTask.Start();
             }
         }

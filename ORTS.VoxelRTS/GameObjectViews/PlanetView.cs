@@ -26,7 +26,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
            
             this.Loaded = true;
         }
-
+        /*
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
@@ -43,9 +43,26 @@ namespace ORTS.VoxelRTS.GameObjectViews
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
         }
+         */ 
         public void Unload()
         {
             
+        }
+
+
+        public void Add(IGameObject GameObject)
+        {
+           // throw new NotImplementedException();
+        }
+
+        public void Update()
+        {
+           // throw new NotImplementedException();
+        }
+
+        public void Render()
+        {
+            //throw new NotImplementedException();
         }
     }
 }

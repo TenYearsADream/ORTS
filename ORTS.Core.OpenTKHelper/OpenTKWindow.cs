@@ -91,6 +91,7 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
             GL.Color4(Color4.White);
+            /*
             lock (this.Engine.Factory.GameObjectsLock)
             {
                 foreach (IGameObject go in this.Engine.Factory.GameObjects)
@@ -105,7 +106,7 @@ namespace ORTS.Core.OpenTKHelper
                     
                 }
             }
-
+            */
             this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
             this.SwapBuffers();
         }

@@ -2,7 +2,7 @@
 
 namespace ORTS.Core.GameObject
 {
-    public interface IHasPosition : IGameObject
+    public interface IHasPosition
     {
         Vect3 Position { get; }
         Quat Rotation { get; }

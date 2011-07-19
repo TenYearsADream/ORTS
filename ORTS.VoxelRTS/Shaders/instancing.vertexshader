@@ -4,7 +4,7 @@ precision highp float;
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec4 instance_color;
 layout (location = 2) in vec3 instance_position;
-
+layout (location = 3) in vec4 instance_rotation;
 out Fragment
 {
     flat vec4 color;
@@ -12,6 +12,6 @@ out Fragment
 
 void main(void)
 {
-    gl_Position = gl_ModelViewProjectionMatrix * (vec4(position, 1.0) + vec4(instance_position, 0.0));
+    gl_Position = gl_ModelViewProjectionMatrix * (vec4(position + instance_position, 1.0));
     fragment.color = instance_color;
 }

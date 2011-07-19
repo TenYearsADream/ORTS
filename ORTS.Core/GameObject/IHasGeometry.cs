@@ -5,8 +5,9 @@ using System.Text;
 
 namespace ORTS.Core.GameObject
 {
+    /*
     public interface IHasGeometry : IHasPosition
     {
 
-    }
+    }*/
 }

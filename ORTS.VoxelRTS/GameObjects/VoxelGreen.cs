@@ -10,9 +10,10 @@ using ORTS.Core.Maths;
 
 namespace ORTS.VoxelRTS.GameObjects
 {
-    public class VoxelGreen : IGameObject, IBody, IHasGeometry, IHasParent
+    public class VoxelGreen : IGameObject, IBody, IHasParent
     {
         public MessageBus Bus { get; private set; }
+        public int ID { get; private set; }
         //public Vect3 Position { get; private set; }
         public Vect3 Velocity { get; private set; }
         public Vect3 Acceleration { get; private set; }
@@ -65,11 +66,12 @@ namespace ORTS.VoxelRTS.GameObjects
 
         public IParent Parent { get; set; }
 
-        public VoxelGreen(MessageBus bus)
+        public VoxelGreen(int ID, MessageBus bus)
         {
+            this.ID = ID;
             this.Bus = bus;
             Random rnd = new Random();
-            this.Position = Vect3.Zero;
+            this.Position = new Vect3(rnd.Next(0, 5),rnd.Next(0, 5),rnd.Next(0, 5));
             this.Velocity = new Vect3(0, 0, 0);//
             this.Acceleration = new Vect3(0, 0, 0);
 
