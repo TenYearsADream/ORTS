@@ -4,10 +4,10 @@
 [Oo]bj/
 App_Data/
 TestResults/
+_ReSharper.ORTS/
 *.suo
 *.sln.*
 *.csproj.*
 *.exe.*
 *.user
 *.bat
-_ReSharper.ORTS/
