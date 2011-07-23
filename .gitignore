@@ -10,3 +10,4 @@ TestResults/
 *.exe.*
 *.user
 *.bat
+_ReSharper.ORTS/
