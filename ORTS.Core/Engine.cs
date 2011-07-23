@@ -40,12 +40,6 @@ namespace ORTS.Core
             lock (Factory.GameObjectsLock)
             {
                 Parallel.ForEach(Factory.GameObjects, gameobject => gameobject.Update(tickTime));
-                
-                /*
-                foreach (IGameObject gameobject in Factory.GameObjects)
-                {
-                    gameobject.Update(tickTime);
-                }*/
             }
         }
 
