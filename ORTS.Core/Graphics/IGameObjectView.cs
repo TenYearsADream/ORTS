@@ -7,7 +7,7 @@ namespace ORTS.Core.Graphics
         void Load();
         bool Loaded { get; }
         void Unload();
-        void Add(IGameObject GameObject);
+        void Add(IGameObject gameObject);
         void Update();
         void Render();
     }

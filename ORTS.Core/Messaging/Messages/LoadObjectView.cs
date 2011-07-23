@@ -5,7 +5,7 @@ using System.Text;
 using ORTS.Core.Timing;
 using ORTS.Core.Graphics;
 
-namespace ORTS.Core.Messaging
+namespace ORTS.Core.Messaging.Messages
 {
     public class LoadObjectView : BaseMessage
     {

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
 using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 using ORTS.Core.GameObject;
 using ORTS.Core.Timing;
 using ORTS.Core.Maths;
@@ -13,7 +10,7 @@ namespace ORTS.VoxelRTS.GameObjects
     public class VoxelGreen : IGameObject, IBody, IHasParent
     {
         public MessageBus Bus { get; private set; }
-        public int ID { get; private set; }
+        public int Id { get; private set; }
         //public Vect3 Position { get; private set; }
         public Vect3 Velocity { get; private set; }
         public Vect3 Acceleration { get; private set; }
@@ -68,7 +65,7 @@ namespace ORTS.VoxelRTS.GameObjects
 
         public VoxelGreen(int ID, MessageBus bus)
         {
-            this.ID = ID;
+            this.Id = ID;
             this.Bus = bus;
             Random rnd = new Random();
             this.Position = new Vect3(rnd.Next(0, 5),rnd.Next(0, 5),rnd.Next(0, 5));

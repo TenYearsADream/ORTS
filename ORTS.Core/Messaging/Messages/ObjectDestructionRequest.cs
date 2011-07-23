@@ -5,7 +5,7 @@ using System.Text;
 using ORTS.Core.GameObject;
 using ORTS.Core.Timing;
 
-namespace ORTS.Core.Messaging
+namespace ORTS.Core.Messaging.Messages
 {
     public class ObjectDestructionRequest : BaseMessage
     {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ORTS.Core.GameObject;
-using ORTS.Core.Timing;
 using ORTS.Core.Messaging;
+using ORTS.Core.Timing;
+using ORTS.Core.Messaging.Messages;
 using ORTS.Core.Maths;
 
 namespace ORTS.VoxelRTS.GameObjects
@@ -15,7 +16,7 @@ namespace ORTS.VoxelRTS.GameObjects
     {
 
         public MessageBus Bus { get; private set; }
-        public int ID { get; private set; }
+        public int Id { get; private set; }
         public Vect3 Position { get; private set; }
         public Vect3 Velocity { get; private set; }
         public Vect3 Acceleration { get; private set; }

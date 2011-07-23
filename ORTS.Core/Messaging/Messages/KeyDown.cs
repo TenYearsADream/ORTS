@@ -1,6 +1,6 @@
 ﻿using ORTS.Core.Timing;
 using System.Windows.Forms;
-namespace ORTS.Core.Messaging
+namespace ORTS.Core.Messaging.Messages
 {
     public class KeyDown : BaseMessage
     {

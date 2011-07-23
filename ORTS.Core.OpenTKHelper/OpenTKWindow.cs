@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using ORTS.Core.GameObject;
 using ORTS.Core.Graphics;
-using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 using ORTS.Core.Maths;
 
 namespace ORTS.Core.OpenTKHelper

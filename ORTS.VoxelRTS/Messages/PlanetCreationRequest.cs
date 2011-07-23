@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ORTS.Core.Timing;
 using ORTS.VoxelRTS.GameObjects;
-using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 
 namespace ORTS.VoxelRTS.Messaging
 {

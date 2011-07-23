@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ORTS.Core.Graphics;
 using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 
 namespace ORTS.Core.OpenTKHelper
 {

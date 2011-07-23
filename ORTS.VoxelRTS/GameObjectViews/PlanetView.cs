@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ORTS.Core.Graphics;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using ORTS.Core.OpenTKHelper;
+﻿using ORTS.Core.Graphics;
 using ORTS.Core.GameObject;
-using System.Drawing;
 
 namespace ORTS.VoxelRTS.GameObjectViews
 {
@@ -18,13 +10,13 @@ namespace ORTS.VoxelRTS.GameObjectViews
 
         public PlanetView()
         {
-            this.Loaded = false;
+            Loaded = false;
         }
 
         public void Load()
         {
            
-            this.Loaded = true;
+            Loaded = true;
         }
         /*
         public void Render(IHasGeometry GameObject)
@@ -50,7 +42,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
         }
 
 
-        public void Add(IGameObject GameObject)
+        public void Add(IGameObject gameObject)
         {
            // throw new NotImplementedException();
         }

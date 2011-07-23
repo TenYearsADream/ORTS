@@ -2,56 +2,48 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using ORTS.Core;
+using ORTS.Core.OpenTKHelper;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using ORTS.Core.GameObject;
 using ORTS.Core.Graphics;
-using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 using ORTS.Core.Maths;
-using ORTS.VoxelRTS.GameObjectViews;
-using ORTS.VoxelRTS.GameObjects;
 
-namespace ORTS.Core.OpenTKHelper
+namespace ORTS.VoxelRTS
 {
     public class VoxelRTSWindow : GameWindow
     {
         public GameEngine Engine { get; private set; }
         public ConcurrentDictionary<Type,IGameObjectView> Views { get; private set; }
 
-        public Camera camera { get; private set; }
-
+        public Camera Camera { get; private set; }
+        private bool _graphicsDirty = true;
         public VoxelRTSWindow(GameEngine engine)
             : base(800, 600, new GraphicsMode(32, 24, 0, 2), "ORTS.Test")
         {
             VSync = VSyncMode.Off;
             Views= new ConcurrentDictionary<Type,IGameObjectView>();
-            this.Engine = engine;
+            Engine = engine;
 
-            this.Engine.Bus.OfType<LoadObjectView>().Subscribe(m => Views.TryAdd(m.GameObjectType,m.View));
+            Engine.Bus.OfType<LoadObjectView>().Subscribe(m => Views.TryAdd(m.GameObjectType,m.View));
+            Engine.Bus.OfType<GraphicsDirtyMessage>().Subscribe(m => _graphicsDirty = true);
 
 
-            KeyMap map = new KeyMap();
-
-            Keyboard.KeyDown += (object sender, KeyboardKeyEventArgs e) => { 
-                this.Engine.Bus.Add(new KeyDown(this.Engine.Timer.LastTickTime, map.Do(e.Key))); 
-            };
-            Keyboard.KeyUp += (object sender, KeyboardKeyEventArgs e) => {
-                this.Engine.Bus.Add(new KeyUp(this.Engine.Timer.LastTickTime, map.Do(e.Key))); 
-            };
-
-            Mouse.WheelChanged += (object sender, MouseWheelEventArgs e) => {
-                camera.Translate(new Vect3(0,0,-e.DeltaPrecise));
-            };
+            var map = new KeyMap();
+            Keyboard.KeyDown += (sender, e) => Engine.Bus.Add(new KeyDown(Engine.Timer.LastTickTime, map.Do(e.Key)));
+            Keyboard.KeyUp += (sender, e) => Engine.Bus.Add(new KeyUp(Engine.Timer.LastTickTime, map.Do(e.Key)));
+            Mouse.WheelChanged += (sender, e) => Camera.Translate(new Vect3(0,0,-e.DeltaPrecise));
 
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
 
-            camera = new Camera();
-            camera.Translate(new Vect3(0, 0, 30));
+            Camera = new Camera();
+            Camera.Translate(new Vect3(0, 0, 30));
         }
-        public void LoadView(Type type, IGameObjectView View){
-            Views.TryAdd(type, View);
+        public void LoadView(Type type, IGameObjectView view){
+            Views.TryAdd(type, view);
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -60,15 +52,17 @@ namespace ORTS.Core.OpenTKHelper
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.ColorArray);
+            GL.Enable(EnableCap.VertexArray);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            foreach (KeyValuePair<Type, IGameObjectView> pair in Views)
             {
                 if (!pair.Value.Loaded)
                 {
                     pair.Value.Load();
-                    this.Engine.Bus.Add(new SystemMessage(this.Engine.Timer.LastTickTime, "Loaded: " + pair.Value.ToString()));
+                    Engine.Bus.Add(new SystemMessage(Engine.Timer.LastTickTime, "Loaded: " + pair.Value));
                 }
             }
         }
@@ -76,16 +70,32 @@ namespace ORTS.Core.OpenTKHelper
         
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            if (_graphicsDirty)
+            {
+                lock (Engine.Factory.GameObjectsLock)
+                {
+                    foreach (var go in Engine.Factory.GameObjects.Where(go => Views.ContainsKey(go.GetType())))
+                    {
+                        Views[go.GetType()].Add(go);
+                    }
+                }
+                foreach (var pair in Views)
+                {
+                    pair.Value.Update();
+                }
+                _graphicsDirty = false;
+            }
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.Translate(camera.postion.ToVector3());
-            AxisAngle aa = camera.rotation.toAxisAngle();
+            GL.Translate(Camera.postion.ToVector3());
+            AxisAngle aa = Camera.rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
 
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            foreach (KeyValuePair<Type, IGameObjectView> pair in Views)
             {
                 pair.Value.Render();
             }
@@ -103,11 +113,9 @@ namespace ORTS.Core.OpenTKHelper
             GL.Vertex3(0f, 0f, 1f);
             GL.End();
             GL.Color4(Color4.White);
-            
-
             */
-            this.Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
-            this.SwapBuffers();
+            Title = "FPS: " + string.Format("{0:F}", 1.0 / e.Time) +" Views Loaded: "+Views.Count + " Game Objects: "+Engine.Factory.GameObjects.Count;
+            SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
@@ -116,39 +124,31 @@ namespace ORTS.Core.OpenTKHelper
 
             if (Keyboard[Key.W])
             {
-                camera.Translate(new Vect3(0, 10f * e.Time, 0));
+                Camera.Translate(new Vect3(0, 20f * e.Time, 0));
             }
 
             if (Keyboard[Key.S])
             {
-                camera.Translate(new Vect3(0, -10f * e.Time, 0));
+                Camera.Translate(new Vect3(0, -20f * e.Time, 0));
             }
 
             if (Keyboard[Key.A])
             {
-                camera.Translate(new Vect3(-10f * e.Time,0, 0));
-                Engine.Bus.Add(new ObjectCreationRequest(Engine.Timer.LastTickTime, typeof(VoxelGreen)));
+                Camera.Translate(new Vect3(-20f * e.Time,0, 0));
             }
 
             if (Keyboard[Key.D])
             {
-                camera.Translate(new Vect3(10f * e.Time, 0, 0));
+                Camera.Translate(new Vect3(20f * e.Time, 0, 0));
             }
 
-            lock (this.Engine.Factory.GameObjectsLock)
+
+            if (Keyboard[Key.H])
             {
-                foreach (IGameObject go in this.Engine.Factory.GameObjects)
-                {
-                    if (this.Views.ContainsKey(go.GetType()))
-                    {
-                        this.Views[go.GetType()].Add(go);
-                    }
-                }
+
             }
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
-            {
-                pair.Value.Update();
-            }
+
+
         }
         protected override void OnResize(EventArgs e)
         {
@@ -157,14 +157,14 @@ namespace ORTS.Core.OpenTKHelper
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 1, 512);
+            var perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1, 512);
             GL.LoadMatrix(ref perspective);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
         }
         protected override void OnUnload(EventArgs e)
         {
-            foreach (KeyValuePair<Type, IGameObjectView> pair in this.Views)
+            foreach (KeyValuePair<Type, IGameObjectView> pair in Views)
             {
                 pair.Value.Unload();
             }

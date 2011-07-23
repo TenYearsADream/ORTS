@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ORTS.Core.GameObject;
 using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 using ORTS.VoxelRTS.GameObjects;
 using ORTS.Core.Maths;
 using ORTS.VoxelRTS.Messaging;
@@ -12,24 +11,19 @@ namespace ORTS.VoxelRTS
 {
     public class VoxelRTSGameObjectFactory: GameObjectFactory
     {
-        private int IDTally = 1;
+        private int _idTally = 1;
         public VoxelRTSGameObjectFactory(MessageBus bus)
             : base(bus)
         {
-            Bus.OfType<PlanetCreationRequest>().Subscribe(m => CreatePlanet(m));
-        }
-
-        private double Fvalue(double x, double y, double z, double R)
-        {
-            return x*x + y*y + z*z - R*R;
+            Bus.OfType<PlanetCreationRequest>().Subscribe(CreatePlanet);
         }
 
         private void CreatePlanet(PlanetCreationRequest request)
         {
-            lock (this.GameObjectsLock)
+            lock (GameObjectsLock)
             {
-                Planet item = new Planet(this.Bus);
-                this.GameObjects.Add(item);
+                var item = new Planet(Bus);
+                GameObjects.Add(item);
                 for (int x = 0; x < request.PlanetSize; ++x)
                 {
                     for (int y = 0; y < request.PlanetSize; ++y)
@@ -38,11 +32,11 @@ namespace ORTS.VoxelRTS
                         {
                             if ((Math.Pow(x - (request.PlanetSize - 1) / 2.0, 2) + Math.Pow(y - (request.PlanetSize - 1) / 2.0, 2) + Math.Pow(z - (request.PlanetSize - 1) / 2.0, 2) - Math.Pow(request.PlanetSize / 2.0, 2)) <= 0)
                             {
-                                VoxelGreen child = new VoxelGreen(IDTally++, this.Bus)
+                                var child = new VoxelGreen(_idTally++, Bus)
                                 {
                                     Position = new Vect3(x,y,z)
                                 };
-                                this.GameObjects.Add(child);
+                                GameObjects.Add(child);
                                 item.AddChild(child);
                             }
                         }
@@ -56,10 +50,10 @@ namespace ORTS.VoxelRTS
         {
             if (request.ObjectType == typeof(VoxelGreen))
             {
-                var item = new VoxelGreen(IDTally++, this.Bus);
-                lock (this.GameObjectsLock)
+                var item = new VoxelGreen(_idTally++, Bus);
+                lock (GameObjectsLock)
                 {
-                    this.GameObjects.Add(item);
+                    GameObjects.Add(item);
                 }
                 Bus.Add(new ObjectCreated(request.TimeSent, item));
             }

@@ -1,11 +1,13 @@
 ﻿using System;
+using ORTS.Core.Extensions;
 using ORTS.Core.GameObject;
 using ORTS.Core.Messaging;
+using ORTS.Core.Messaging.Messages;
 using ORTS.Core.Sound;
 using ORTS.Core.Timing;
 using ORTS.Core.Graphics;
 using System.Threading.Tasks;
-using System.Threading;
+
 namespace ORTS.Core
 {
     public class GameEngine : IHasMessageBus, IDisposable
@@ -20,27 +22,25 @@ namespace ORTS.Core
 
         public Task GraphicsTask { get; private set; }
 
-
         public GameEngine(MessageBus bus, GameObjectFactory factory, IGraphics graphics)
         {
 
-            this.Timer = new AsyncObservableTimer();
-            this.Bus = bus;
-            this.Factory = factory;
-            this.Graphics = graphics;
-             IsRunning = false;
-            this.Timer.Subscribe(t => this.Update(t));
-            this.Timer.SubSample(5).Subscribe(t => Bus.SendAll());
+            Timer = new AsyncObservableTimer();
+            Bus = bus;
+            Factory = factory;
+            Graphics = graphics;
+            IsRunning = false;
+            Timer.Subscribe(Update);
+            Timer.SubSample(5).Subscribe(t => Bus.SendAll());
+            Timer.SubSample(5).Subscribe(t => Bus.Add(new GraphicsDirtyMessage(t)));
         }
 
         public void Update(TickTime tickTime)
         {
             lock (Factory.GameObjectsLock)
             {
-                Parallel.ForEach<IGameObject>(Factory.GameObjects, gameobject =>
-                {
-                    gameobject.Update(tickTime);
-                });
+                Parallel.ForEach(Factory.GameObjects, gameobject => gameobject.Update(tickTime));
+                
                 /*
                 foreach (IGameObject gameobject in Factory.GameObjects)
                 {
@@ -57,9 +57,9 @@ namespace ORTS.Core
                 Timer.Start();
                 IsRunning = true;
                 Bus.Add(new SystemMessage(Timer.LastTickTime, "Engine started."));
-
-                GraphicsTask = new Task(() => this.Graphics.Start(this));
+                GraphicsTask = new Task(() => Graphics.Start(this));
                 GraphicsTask.Start();
+
             }
         }
 

@@ -1,0 +1,5 @@
+<Modules>
+  <Module PersistentId="30B1DCFC-DA6F-4838-A120-7B8FB8CC4975" ModuleId="ORTS.VoxelRTS" />
+  <Module PersistentId="8EEB6419-D08A-461B-A7AC-06BD6DE9132A" ModuleId="ORTS.Core" />
+  <Module PersistentId="D957ACFA-4281-4040-BB38-546F7A280A6F" ModuleId="ORTS.Core.OpenTKHelper" />
+</Modules>

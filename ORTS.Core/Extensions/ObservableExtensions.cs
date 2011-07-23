@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace ORTS.Core
+namespace ORTS.Core.Extensions
 {
     public static class ObservableExtensions
     {
