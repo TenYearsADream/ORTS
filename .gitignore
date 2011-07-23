@@ -33,6 +33,7 @@ obj/
 #Tooling
 _ReSharper*/
 *.resharper
+*.resharper.user
 [Tt]est[Rr]esult*
 
 # Office Temp Files
