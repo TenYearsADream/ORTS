@@ -72,6 +72,7 @@
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\IHasMessageBus.cs" />
     <Compile Include="Messaging\Messages\BaseMessage.cs" />
+    <Compile Include="Messaging\Messages\DestroyAllObjects.cs" />
     <Compile Include="Messaging\Messages\LoadObjectView.cs" />
     <Compile Include="Messaging\Messages\KeyUp.cs" />
     <Compile Include="Messaging\Messages\KeyDown.cs" />
@@ -85,6 +86,8 @@
     <Compile Include="Reactive\AnonymousDisposable.cs" />
     <Compile Include="Reactive\Observable.cs" />
     <Compile Include="Sound\ISound.cs" />
+    <Compile Include="States\IdleState.cs" />
+    <Compile Include="States\IState.cs" />
     <Compile Include="Timing\AsyncObservableTimer.cs" />
     <Compile Include="Timing\IGameTime.cs" />
     <Compile Include="Timing\ObservableTimer.cs" />

@@ -7,14 +7,12 @@ using ORTS.Core.Timing;
 
 namespace ORTS.Core.Messaging.Messages
 {
-    public class ObjectDestructionRequest : BaseMessage
+    public class DestroyAllObjects : BaseMessage
     {
-        public IGameObject GameObject { get; private set; }
-
-        public ObjectDestructionRequest(IGameTime timeSent, IGameObject gameObject)
+        public DestroyAllObjects(IGameTime timeSent)
             : base(timeSent)
         {
-            GameObject = gameObject;
+
         }
     }
 }

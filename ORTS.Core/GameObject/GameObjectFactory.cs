@@ -18,6 +18,7 @@ namespace ORTS.Core.GameObject
             Bus = bus;
             Bus.OfType<ObjectCreationRequest>().Subscribe(CreateGameObject);
             Bus.OfType<ObjectDestructionRequest>().Subscribe(DestroyGameObject);
+            Bus.OfType<DestroyAllObjects>().Subscribe(m => GameObjects.Clear());
         }
 
         public virtual void CreateGameObject(ObjectCreationRequest m)

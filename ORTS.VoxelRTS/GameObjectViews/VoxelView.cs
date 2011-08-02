@@ -93,10 +93,10 @@ namespace ORTS.VoxelRTS.GameObjectViews
                 shader.AddShader(ShaderType.FragmentShader, sr.ReadToEnd());
             }
 
-            GL.BindAttribLocation(shader.shaderProgram, 0, "position");
-            GL.BindAttribLocation(shader.shaderProgram, 1, "instance_color");
-            GL.BindAttribLocation(shader.shaderProgram, 2, "instance_position");
-            GL.BindAttribLocation(shader.shaderProgram, 3, "instance_rotation");
+            GL.BindAttribLocation(shader.Program, 0, "position");
+            GL.BindAttribLocation(shader.Program, 1, "instance_color");
+            GL.BindAttribLocation(shader.Program, 2, "instance_position");
+            GL.BindAttribLocation(shader.Program, 3, "instance_rotation");
 
             shader.Link();
             int square_vertices_size = square_vertices.Length * 4; 

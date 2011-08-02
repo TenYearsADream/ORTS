@@ -68,9 +68,9 @@ namespace ORTS.VoxelRTS.GameObjectViews
             {
                 _shader.AddShader(ShaderType.FragmentShader, sr.ReadToEnd());
             }
-            GL.BindAttribLocation(_shader.shaderProgram, 0, "position");
-            GL.BindAttribLocation(_shader.shaderProgram, 1, "instance_position");
-            GL.BindAttribLocation(_shader.shaderProgram, 2, "instance_rotation");
+            GL.BindAttribLocation(_shader.Program, 0, "position");
+            GL.BindAttribLocation(_shader.Program, 1, "instance_position");
+            GL.BindAttribLocation(_shader.Program, 2, "instance_rotation");
 
             _shader.Link();
             GL.GenVertexArrays(1, out _squareVao);
@@ -143,7 +143,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
             _count2 = 0;
              * */
             _count = 0;
-            foreach (IGameObject o in _objects)
+            foreach (var o in _objects)
             {
                 _positions.Add((float)o.Position.X);
                 _positions.Add((float)o.Position.Y);

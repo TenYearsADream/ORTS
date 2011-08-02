@@ -48,6 +48,7 @@ namespace ORTS.VoxelRTS
 
         public override void CreateGameObject(ObjectCreationRequest request)
         {
+            
             if (request.ObjectType == typeof(VoxelGreen))
             {
                 var item = new VoxelGreen(_idTally++, Bus);
@@ -57,28 +58,18 @@ namespace ORTS.VoxelRTS
                 }
                 Bus.Add(new ObjectCreated(request.TimeSent, item));
             }
-            if (request.ObjectType == typeof(Planet))
+            Console.WriteLine(request.ObjectType);
+            if (request.ObjectType == typeof(TopMenu))
             {
-                /*
-                var item = new Planet(this.Bus);
-                lock (this.GameObjectsLock)
-                {
-                    this.GameObjects.Add(item);
-                    VoxelGreen child;
-                     Random rnd = new Random();
-                    for (int i = 1; i <= 20; i++)
-                    {
 
-                        child = new VoxelGreen(this.Bus)
-                        {
-                            Position = new Vect3(rnd.Next(-10, 10), rnd.Next(-10, 10), rnd.Next(-10, 10))
-                        };                        this.GameObjects.Add(child);
-                        item.AddChild(child);
-                    }
-                
-                }*/
-                //Bus.Add(new ObjectCreated(request.TimeSent, item));
+                var item = new TopMenu(_idTally++, Bus);
+                lock (GameObjectsLock)
+                {
+                    GameObjects.Add(item);
+                    Bus.Add(new ObjectCreated(request.TimeSent, item));
+                }
             }
+
             base.CreateGameObject(request);
         }
 

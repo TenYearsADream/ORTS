@@ -7,7 +7,7 @@ namespace ORTS.Core.Sound
 {
     public interface ISound
     {
-        void Start();
+        void Start(GameEngine engine);
         void Stop();
     }
 }

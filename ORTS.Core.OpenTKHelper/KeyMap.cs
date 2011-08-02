@@ -23,7 +23,7 @@ namespace ORTS.Core.OpenTKHelper
             keys.Add(Key.Escape, Keys.Escape);
             keys.Add(Key.Space, Keys.Space);
         }
-        public Keys Do(Key key)
+        public Keys Match(Key key)
         {
             if (keys.ContainsKey(key))
             {

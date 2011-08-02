@@ -22,7 +22,6 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public void Render(IHasGeometry GameObject)
         {
             GL.Translate(GameObject.Position.ToVector3());
-
             GL.Begin(BeginMode.Lines);
             GL.Color4(Color4.Red);
             GL.Vertex3(0f, 0f, 0f);

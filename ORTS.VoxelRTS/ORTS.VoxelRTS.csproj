@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AwesomiumSharp">
+      <HintPath>..\Packages\Awesomium-1.6.1\AwesomiumSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\Packages\Ninject-2.2.0.0\Ninject.dll</HintPath>
     </Reference>
@@ -59,12 +62,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\TopMenu.cs" />
     <Compile Include="GameObjects\Planet.cs" />
     <Compile Include="GameObjects\VoxelGreen.cs" />
+    <Compile Include="GameObjectViews\TopMenuView.cs" />
     <Compile Include="GameObjectViews\PlanetView.cs" />
     <Compile Include="GameObjectViews\VoxelGreenView.cs" />
     <Compile Include="GameObjectViews\VoxelView.cs" />
     <Compile Include="Messages\PlanetCreationRequest.cs" />
+    <Compile Include="States\MainState.cs" />
+    <Compile Include="States\TopMenuState.cs" />
+    <Compile Include="VoxelRTSSound.cs" />
     <Compile Include="VoxelRTSWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,11 +91,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Awesomium.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AwesomiumProcess.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icudt42.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Textures\blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\TopMenu.Frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\TopMenu.Vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\instancing.fragmentshader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -101,6 +124,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
