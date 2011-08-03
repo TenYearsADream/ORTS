@@ -35,7 +35,6 @@ namespace ORTS.VoxelRTS
 
             Camera = new Camera();
             Camera.Translate(new Vect3(0, 0, 30));
-
             engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
         }
         public void LoadView(Type type, IGameObjectView view){
@@ -61,7 +60,6 @@ namespace ORTS.VoxelRTS
             }
         }
 
-        
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -109,7 +107,7 @@ namespace ORTS.VoxelRTS
                     Camera.Translate(new Vect3(20f * e.Time, 0, 0));
                 }
 
-            if (_graphicsDirty)
+            //if (_graphicsDirty)
             {
                 lock (Engine.Factory.GameObjectsLock)
                 {
