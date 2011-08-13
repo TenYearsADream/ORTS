@@ -2,12 +2,11 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using AwesomiumSharp;
 using ORTS.Core.Graphics;
 using ORTS.Core.GameObject;
 using ORTS.Core.OpenTKHelper;
 using OpenTK.Graphics.OpenGL;
-using System.Windows.Forms;
+
 
 namespace ORTS.VoxelRTS.GameObjectViews
 {
@@ -29,28 +28,14 @@ namespace ORTS.VoxelRTS.GameObjectViews
         }
 
 
-
         int _texture;
-        private WebView _webView;
+        private bool _isDirty = true;
+        private Bitmap _bitmap;
         public void Load()
         {
-            WebCore.Initialize(new WebCore.Config { customCSS = "body { font-size: 15px !important; color:white}", logLevel = LogLevel.None, enablePlugins = true, enableJavascript = true});
+            _bitmap = new Bitmap(_voxelRTSWindow.Width, _voxelRTSWindow.Height);
+            _voxelRTSWindow.Resize += (sender, e) => _isDirty = true;
 
-            _webView = WebCore.CreateWebview(_voxelRTSWindow.Width, _voxelRTSWindow.Height);
-            _webView.SetTransparent(true);
-            _webView.OnChangeCursor += new WebView.ChangeCursorEventArgsHandler(_webView_OnChangeCursor);
-            _webView.ResetZoom();
-            
-            
-            _voxelRTSWindow.Resize += (sender, e) => _webView.Resize(_voxelRTSWindow.Width, _voxelRTSWindow.Height);
-            _voxelRTSWindow.Mouse.ButtonUp += (sender, e) => _webView.InjectMouseUp(MouseButton.Left);
-            _voxelRTSWindow.Mouse.ButtonDown += (sender, e) => _webView.InjectMouseDown(MouseButton.Left);
-            _voxelRTSWindow.Mouse.Move += (sender, e) => _webView.InjectMouseMove(e.X, e.Y);
-
-            //_webView.LoadFile("/GUI/test.htm");
-            _webView.LoadURL("http://youtube.com");
-
-            
             GL.GenTextures(1, out _texture);
             GL.BindTexture(TextureTarget.Texture2D, _texture);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -68,23 +53,27 @@ namespace ORTS.VoxelRTS.GameObjectViews
                 _shader.AddShader(ShaderType.FragmentShader, sr.ReadToEnd());
             }
             _shader.Link();
-
-            
-
             Loaded = true;
         }
 
-        void _webView_OnChangeCursor(object sender, WebView.ChangeCursorEventArgs e)
-        {
-            Cursor.Current = Cursors.IBeam;
 
-            
-        }
 
         void UpdateTexture()
         {
+            _bitmap = new Bitmap(_voxelRTSWindow.Width, _voxelRTSWindow.Height);
             GL.BindTexture(TextureTarget.Texture2D, _texture);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, _voxelRTSWindow.Width, _voxelRTSWindow.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, _webView.Render().GetBuffer());
+
+            using (Graphics gfx = Graphics.FromImage(_bitmap))
+            {
+                gfx.Clear(Color.Transparent);
+                gfx.FillRectangle(Brushes.White, new Rectangle(0, 50, 500, 100));
+                gfx.DrawString("VoxelRTS", new Font(FontFamily.GenericSansSerif, 40, FontStyle.Regular), Brushes.Black, 200, 70);
+            }
+
+            var data = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            _bitmap.UnlockBits(data);
         }
 
         void _shader_OnMessage(string error)
@@ -94,7 +83,7 @@ namespace ORTS.VoxelRTS.GameObjectViews
 
         public void Unload()
         {
-            WebCore.Shutdown();
+
         }
 
         public void Add(IGameObject gameObject)
@@ -104,9 +93,12 @@ namespace ORTS.VoxelRTS.GameObjectViews
 
         public void Update()
         {
-            WebCore.Update();
-            if(_webView.IsDirty())
+            if(_isDirty)
+            {
                 UpdateTexture();
+                _isDirty = false;
+            }
+               
         }
 
         public void Render()
