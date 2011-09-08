@@ -39,17 +39,42 @@ namespace ORTS.VoxelRTS.States
 
         }
 
-        public void KeyUp(KeyUp m)
+        public void KeyUp(KeyUpMessage m)
         {
             if (m.Key == Keys.Space)
             {
-                _engine.Bus.Add(new DestroyAllObjects(_engine.Timer.LastTickTime));
+                _engine.Bus.Add(new ObjectsDestroyAll(_engine.Timer.LastTickTime));
                 _engine.CurrentState = new MainState(_engine);
             }
                 
         }
 
-        public void KeyDown(KeyDown m)
+        public void KeyPress(KeyPressMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MouseMove(MouseMoveMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MouseButtonDown(MouseButtonDownMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MouseButtonUp(MouseButtonUpMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MouseWheelChanged(MouseWheelChangedMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void KeyDown(KeyDownMessage m)
         {
 
         }

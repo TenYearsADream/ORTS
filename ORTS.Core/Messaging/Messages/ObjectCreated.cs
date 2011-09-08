@@ -12,5 +12,9 @@ namespace ORTS.Core.Messaging.Messages
         {
             GameObject = gameObject;
         }
+        public override string ToString()
+        {
+            return "{0} ObjectCreated - {1}:{2}".fmt(TimeSent, GameObject.Id, GameObject.GetType().Name);
+        }
     }
 }

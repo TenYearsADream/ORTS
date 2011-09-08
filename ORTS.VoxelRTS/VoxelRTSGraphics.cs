@@ -25,9 +25,25 @@ namespace ORTS.VoxelRTS
                 p.Run();
             }
         }
-        public void Stop()
+
+        public void Initialise(GameEngine engine)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Run()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Start()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Stop()
+        {
+
         }
     }
 }

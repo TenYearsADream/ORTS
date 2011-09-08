@@ -1,4 +1,5 @@
-﻿using ORTS.Core.Graphics;
+﻿using System.Collections.Generic;
+using ORTS.Core.Graphics;
 using ORTS.Core.GameObject;
 
 namespace ORTS.VoxelRTS.GameObjectViews
@@ -15,7 +16,6 @@ namespace ORTS.VoxelRTS.GameObjectViews
 
         public void Load()
         {
-           
             Loaded = true;
         }
         /*
@@ -38,6 +38,11 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public void Unload()
         {
             
+        }
+
+        public void Update(IEnumerable<IGameObject> gameObjects, double delta)
+        {
+            throw new System.NotImplementedException();
         }
 
 

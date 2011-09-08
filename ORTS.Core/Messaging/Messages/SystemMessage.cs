@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ORTS.Core.Timing;
+﻿using ORTS.Core.Timing;
 
 namespace ORTS.Core.Messaging.Messages
 {
@@ -14,6 +10,10 @@ namespace ORTS.Core.Messaging.Messages
             : base(timeSent)
         {
             Message = message;
+        }
+        public override string ToString()
+        {
+            return "{0} SYSTEM - {1}".fmt(TimeSent, Message);
         }
     }
 }

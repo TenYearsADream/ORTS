@@ -12,20 +12,20 @@ namespace ORTS.Core.OpenTKHelper
 {
     public class Camera: ICamera
     {
-        public Quat rotation { get; private set; }
-        public Vect3 postion { get; private set; }
+        public Quat Rotation { get; private set; }
+        public Vect3 Postion { get; private set; }
         public Camera()
         {
-            rotation = Quat.Identity;
-            postion = Vect3.Zero;
+            Rotation = Quat.Identity;
+            Postion = Vect3.Zero;
         }
         public void Rotate(Quat q)
         {
-            rotation *= q;
+            Rotation *= q;
         }
         public void Translate(Vect3 v)
         {
-            postion += -v;
+            Postion += -v;
         }
         public Matrix4 toMatrix4()
         {

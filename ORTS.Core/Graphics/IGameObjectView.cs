@@ -1,4 +1,5 @@
-﻿using ORTS.Core.GameObject;
+﻿using System.Collections.Generic;
+using ORTS.Core.GameObject;
 
 namespace ORTS.Core.Graphics
 {
@@ -7,8 +8,8 @@ namespace ORTS.Core.Graphics
         void Load();
         bool Loaded { get; }
         void Unload();
-        void Add(IGameObject gameObject);
-        void Update();
+        void Update(IEnumerable<IGameObject> gameObjects, double delta);
         void Render();
     }
 }
+

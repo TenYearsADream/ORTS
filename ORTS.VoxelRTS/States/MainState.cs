@@ -42,7 +42,7 @@ namespace ORTS.VoxelRTS.States
 
         }
 
-        public void KeyUp(KeyUp m)
+        public void KeyUp(KeyUpMessage m)
         {
             if (m.Key == Keys.F)
             {
@@ -51,7 +51,32 @@ namespace ORTS.VoxelRTS.States
 
         }
 
-        public void KeyDown(KeyDown m)
+        public void KeyPress(KeyPressMessage m)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void MouseMove(MouseMoveMessage m)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void MouseButtonDown(MouseButtonDownMessage m)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void MouseButtonUp(MouseButtonUpMessage m)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void MouseWheelChanged(MouseWheelChangedMessage m)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void KeyDown(KeyDownMessage m)
         {
 
         }

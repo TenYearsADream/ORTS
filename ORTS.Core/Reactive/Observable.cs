@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
 namespace ORTS.Core.Reactive
 {
 
     public class Observable<T> : IObservable<T>, IDisposable
     {
-        private ICollection<IObserver<T>> _subscribers = new List<IObserver<T>>();
+        private readonly ICollection<IObserver<T>> _subscribers = new List<IObserver<T>>();
 
         public void OnNext(T value)
         {
@@ -37,18 +34,14 @@ namespace ORTS.Core.Reactive
 
             _subscribers.Add(observer);
 
-            return new AnonymousDisposable(() =>
-            {
-                _subscribers.Remove(observer);
-            });
-
+            return new AnonymousDisposable(() => _subscribers.Remove(observer));
         }
 
         #endregion
 
 
         #region IDisposable Members
-        private bool _isDisposed = false;
+        private bool _isDisposed;
         public virtual void Dispose()
         {
             _isDisposed = true;

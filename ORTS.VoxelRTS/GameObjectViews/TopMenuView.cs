@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -84,6 +85,11 @@ namespace ORTS.VoxelRTS.GameObjectViews
         public void Unload()
         {
 
+        }
+
+        public void Update(IEnumerable<IGameObject> gameObjects, double delta)
+        {
+            throw new NotImplementedException();
         }
 
         public void Add(IGameObject gameObject)

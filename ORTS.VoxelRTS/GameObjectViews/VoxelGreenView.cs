@@ -92,7 +92,12 @@ namespace ORTS.VoxelRTS.GameObjectViews
            // GL.DeleteTextures(1, ref texture);
             
         }
-        
+
+        public void Update(IEnumerable<IGameObject> gameObjects, double delta)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private readonly List<float> _positions = new List<float>();
         private readonly List<float> _rotations = new List<float>();

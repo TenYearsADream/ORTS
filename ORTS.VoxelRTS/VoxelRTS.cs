@@ -23,10 +23,10 @@ namespace ORTS.VoxelRTS
                 
                 engine.Bus.OfType<SystemMessage>().Subscribe(
                     m => Console.WriteLine("{0} SYSTEM - {1}", m.TimeSent.ToString(), m.Message));
-                engine.Bus.OfType<KeyDown>().Subscribe(
+                engine.Bus.OfType<KeyDownMessage>().Subscribe(
                     m => Console.WriteLine("{0} KeyDown - {1}", m.TimeSent.ToString(), m.Key.ToString()));
                 engine.Bus.OfType<GraphicsLoadedMessage>().Subscribe(m => engine.CurrentState = new TopMenuState(engine));
-                engine.Bus.OfType<KeyUp>().Subscribe(m => KeyUp(m, engine));
+                engine.Bus.OfType<KeyUpMessage>().Subscribe(m => KeyUp(m, engine));
                 engine.Start();
                 while (engine.IsRunning)
                 {
@@ -35,7 +35,7 @@ namespace ORTS.VoxelRTS
             }
         }
 
-        private void KeyUp(KeyUp m, GameEngine engine)
+        private void KeyUp(KeyUpMessage m, GameEngine engine)
         {
             engine.Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "{0} KeyUp - {1}".fmt(m.TimeSent, m.Key)));
             if (m.Key == Keys.Escape)

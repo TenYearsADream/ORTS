@@ -7,6 +7,8 @@ namespace ORTS.Core.Messaging
 
         public IBuffer<IMessage> PendingMessages { get; private set; }
 
+
+
         public MessageBus()
         {
             PendingMessages = new Buffer<IMessage>();
@@ -15,6 +17,7 @@ namespace ORTS.Core.Messaging
 
         public void Add(IMessage message)
         {
+
             PendingMessages.Add(message);
         }
 

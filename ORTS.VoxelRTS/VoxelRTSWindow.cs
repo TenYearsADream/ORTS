@@ -29,8 +29,8 @@ namespace ORTS.VoxelRTS
             Engine.Bus.OfType<GraphicsDirtyMessage>().Subscribe(m => _graphicsDirty = true);
 
             var map = new KeyMap();
-            Keyboard.KeyDown += (sender, e) => Engine.Bus.Add(new KeyDown(Engine.Timer.LastTickTime, map.Match(e.Key)));
-            Keyboard.KeyUp += (sender, e) => Engine.Bus.Add(new KeyUp(Engine.Timer.LastTickTime, map.Match(e.Key)));
+            Keyboard.KeyDown += (sender, e) => Engine.Bus.Add(new KeyDownMessage(Engine.Timer.LastTickTime, map.Match(e.Key)));
+            Keyboard.KeyUp += (sender, e) => Engine.Bus.Add(new KeyUpMessage(Engine.Timer.LastTickTime, map.Match(e.Key)));
             Mouse.WheelChanged += (sender, e) => Camera.Translate(new Vect3(0,0,-e.DeltaPrecise));
 
             Camera = new Camera();
@@ -66,8 +66,8 @@ namespace ORTS.VoxelRTS
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Translate(Camera.postion.ToVector3());
-            AxisAngle aa = Camera.rotation.toAxisAngle();
+            GL.Translate(Camera.Postion.ToVector3());
+            AxisAngle aa = Camera.Rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
 
             foreach (var pair in Views)
@@ -113,12 +113,12 @@ namespace ORTS.VoxelRTS
                 {
                     foreach (var go in Engine.Factory.GameObjects.Where(go => Views.ContainsKey(go.GetType())))
                     {
-                        Views[go.GetType()].Add(go);
+                       // Views[go.GetType()].Add(go);
                     }
                 }
                 foreach (var pair in Views)
                 {
-                    pair.Value.Update();
+                    //pair.Value.Update();
                 }
                 _graphicsDirty = false;
             }

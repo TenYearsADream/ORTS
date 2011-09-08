@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -43,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\LockCollection.cs" />
+    <Compile Include="Algorithms\PerlinNoise.cs" />
+    <Compile Include="Attributes\BindViewAttribute.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\Image.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GameObject\GameObjectFactory.cs" />
@@ -60,11 +63,19 @@
     <Compile Include="GameObject\IParent.cs" />
     <Compile Include="Graphics\ICamera.cs" />
     <Compile Include="Graphics\IGameObjectView.cs" />
+    <Compile Include="Graphics\IModel.cs" />
+    <Compile Include="Graphics\IWidget.cs" />
+    <Compile Include="Graphics\IWidgetFactory.cs" />
+    <Compile Include="Graphics\ModelLoaders\STL.cs" />
+    <Compile Include="Graphics\Primatives\Triangle.cs" />
+    <Compile Include="Graphics\Vertex.cs" />
+    <Compile Include="Graphics\WidgetFactory.cs" />
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AxisAngle.cs" />
     <Compile Include="Maths\Euler.cs" />
     <Compile Include="Maths\Mat4.cs" />
     <Compile Include="Maths\Quat.cs" />
+    <Compile Include="Maths\Vect2.cs" />
     <Compile Include="Maths\Vect3.cs" />
     <Compile Include="Messaging\Buffer.cs" />
     <Compile Include="Messaging\IBuffer.cs" />
@@ -72,14 +83,21 @@
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\IHasMessageBus.cs" />
     <Compile Include="Messaging\Messages\BaseMessage.cs" />
-    <Compile Include="Messaging\Messages\DestroyAllObjects.cs" />
+    <Compile Include="Messaging\Messages\ChatMessage.cs" />
+    <Compile Include="Messaging\Messages\KeyPressMessage.cs" />
+    <Compile Include="Messaging\Messages\WidgetsDestroyAll.cs" />
+    <Compile Include="Messaging\Messages\ScreenResizeMessage.cs" />
+    <Compile Include="Messaging\Messages\MouseMessages.cs" />
+    <Compile Include="Messaging\Messages\WidgetDestructionRequest.cs" />
+    <Compile Include="Messaging\Messages\WidgetCreationRequest.cs" />
+    <Compile Include="Messaging\Messages\ObjectDestructionRequest.cs" />
     <Compile Include="Messaging\Messages\LoadObjectView.cs" />
-    <Compile Include="Messaging\Messages\KeyUp.cs" />
-    <Compile Include="Messaging\Messages\KeyDown.cs" />
+    <Compile Include="Messaging\Messages\KeyUpMessage.cs" />
+    <Compile Include="Messaging\Messages\KeyDownMessage.cs" />
     <Compile Include="Messaging\Messages\ObjectCreated.cs" />
     <Compile Include="Messaging\Messages\ObjectCreationRequest.cs" />
     <Compile Include="Messaging\Messages\ObjectDestroyed.cs" />
-    <Compile Include="Messaging\Messages\ObjectDestructionRequest.cs" />
+    <Compile Include="Messaging\Messages\ObjectsDestroyAll.cs" />
     <Compile Include="Messaging\Messages\SystemMessage.cs" />
     <Compile Include="Messaging\Messages\GraphicsMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
