@@ -28,7 +28,7 @@ namespace ORTS.Space
             Kernel.Bind<MessageBus>().ToSelf().InSingletonScope();
             Kernel.Bind<GameObjectFactory>().To<SpaceGameObjectFactory>().InSingletonScope();
             Kernel.Bind<WidgetFactory>().To<SpaceWidgetFactory>().InSingletonScope();
-            Kernel.Bind<IGraphics>().To<SpaceGraphics>();
+            Kernel.Bind<IGraphicsLoader>().To<SpaceGraphicsLoader>();
             Kernel.Bind<ISound>().To<SpaceSound>();
         }
     }
@@ -40,11 +40,13 @@ namespace ORTS.Space
             using (var engine = kernal.Get<GameEngine>())
             {
                 engine.Bus.Subscribe(m => Console.WriteLine(m.ToString()));
-                engine.Bus.OfType<GraphicsLoadedMessage>().Subscribe(m => engine.CurrentState = new MainMenuState(engine));
+
+                engine.Bus.OfType<GameStartMessage>().Subscribe(m => engine.CurrentState = new MainMenuState(engine));
                 engine.Bus.OfType<KeyUpMessage>().Subscribe(m => KeyUp(m, engine));
                 engine.Start();
                 while (engine.IsRunning)
                 {
+
                 }
                 engine.Stop();
             }

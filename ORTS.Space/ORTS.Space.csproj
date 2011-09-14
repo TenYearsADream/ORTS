@@ -68,6 +68,7 @@
     <Compile Include="Views\SkyBoxView.cs" />
     <Compile Include="Views\PlanetView.cs" />
     <Compile Include="Widgets\ChatWidget.cs" />
+    <Compile Include="Widgets\FPSWidget.cs" />
     <Compile Include="Widgets\MainMenuWidget.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,9 +82,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\ELEPHANT.stl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Models\test-bin.stl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

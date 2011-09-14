@@ -22,13 +22,12 @@ namespace ORTS.Core
         public WidgetFactory WidgetFactory { get; private set; }
 
         public IGraphics Graphics { get; private set; }
+        private IGraphicsLoader _graphicsLoader { get; set; }
+
         public ISound Sound { get; private set; }
 
-        public Task GraphicsTask { get; private set; }
+        
         public Task SoundTask { get; private set; }
-
-
-
 
         private IState _currentState;
         public IState CurrentState
@@ -42,20 +41,27 @@ namespace ORTS.Core
             }
         }
 
-
-
-        public GameEngine(MessageBus bus, GameObjectFactory factory, WidgetFactory widgetFactory, IGraphics graphics, ISound sound)
+        public GameEngine(MessageBus bus, GameObjectFactory factory, WidgetFactory widgetFactory, IGraphicsLoader graphicsLoader, ISound sound)
         {
             _currentState = new IdleState(this);
             Timer = new AsyncObservableTimer();
             Bus = bus;
             Factory = factory;
-            Graphics = graphics;
+            _graphicsLoader = graphicsLoader;
             Sound = sound;
+
             WidgetFactory = widgetFactory;
+            
+            Bus.OfType<GraphicsLoadedMessage>().Subscribe(m => { 
+                Graphics = m.Graphics;
+                WidgetFactory.Initialise(Graphics);
+                Bus.Add(new GameStartMessage(Timer.LastTickTime));
+            });
+
+
             IsRunning = false;
             Timer.Subscribe(Update);
-            Timer.SubSample(1).Subscribe(t => Bus.SendAll());
+            Timer.SubSample(5).Subscribe(t => Bus.SendAll());
 
             //Timer.Subscribe(t => Bus.Add(new GraphicsDirtyMessage(t)));
 
@@ -78,10 +84,10 @@ namespace ORTS.Core
             IsRunning = true;
             Bus.Add(new SystemMessage(Timer.LastTickTime, "Engine started."));
 
-            GraphicsTask = new Task(() => Graphics.Start(this));
-            SoundTask = new Task(() => Sound.Start(this));
+            Bus.Add(new SystemMessage(Timer.LastTickTime, "Graphics Starting."));
+            _graphicsLoader.Start(this);
 
-            GraphicsTask.Start();
+            SoundTask = new Task(() => Sound.Start(this));
             SoundTask.Start();
         }
 

@@ -1,9 +1,6 @@
-﻿using System;
-using ORTS.Core.GameObject;
-using ORTS.Core.Graphics;
+﻿using ORTS.Core.Graphics;
 using ORTS.Core.Messaging;
 using ORTS.Core.Messaging.Messages;
-using ORTS.Space.GameObjects;
 using ORTS.Space.Widgets;
 
 namespace ORTS.Space
@@ -18,6 +15,7 @@ namespace ORTS.Space
 
         public override void CreateWidget(WidgetCreationRequest m)
         {
+
             if (m.WidgetType == typeof(ChatWidget))
             {
                 lock (WidgetsLock)
@@ -30,6 +28,13 @@ namespace ORTS.Space
                 lock (WidgetsLock)
                 {
                     Widgets.Add(new MainMenuWidget(Bus));
+                }
+            }
+            if (m.WidgetType == typeof(FPSWidget))
+            {
+                lock (WidgetsLock)
+                {
+                    Widgets.Add(new FPSWidget(Graphics));
                 }
             }
         }

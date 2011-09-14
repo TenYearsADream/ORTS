@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using ORTS.Core.Graphics;
 using ORTS.Core.Maths;
 using ORTS.Core.Messaging;
@@ -10,8 +10,6 @@ using ORTS.Core;
 using ORTS.Core.Attributes;
 using ORTS.Core.Messaging.Messages;
 using ORTS.Core.OpenTKHelper;
-using ORTS.Core.States;
-using ORTS.Space.GameObjects;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -19,31 +17,26 @@ using OpenTK.Input;
 
 namespace ORTS.Space
 {
-    public class SpaceGraphics : IGraphics
+    public class SpaceGraphicsLoader : IGraphicsLoader
     {
         public MessageBus Bus { get; private set; }
-
-        public SpaceGraphics(MessageBus bus)
+        public Task GraphicsTask { get; private set; }
+        public SpaceGraphicsLoader(MessageBus bus)
         {
             Bus = bus;
         }
+
         public void Start(GameEngine engine)
         {
-            Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "Graphics Starting."));
-            var types = AppDomain.CurrentDomain.GetAssemblies().ToList()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IGameObjectView).IsAssignableFrom(p) && p.IsClass);
-
-            Bus.Add(new SystemMessage(engine.Timer.LastTickTime, "Found " + types.Count() + " Views"));
-
-            using (var s = new SpaceWindow(engine))
-            {
-                foreach (var type1 in types.Where(type1 => type1.IsDefined(typeof (BindViewAttribute), false)))
-                {
-                    s.LoadView(type1.GetCustomAttributes(false).OfType<BindViewAttribute>().First().GameObjectType, (IGameObjectView) Activator.CreateInstance(type1,s.Camera));
-                }
-                s.Run();
-            }
+            
+            GraphicsTask = new Task(() =>
+                                        {
+                                            using (var gfx = new SpaceWindow(engine))
+                                            {
+                                                gfx.Run();
+                                            }
+                                        });
+            GraphicsTask.Start();
         }
 
         public void Stop()
@@ -53,26 +46,27 @@ namespace ORTS.Space
     }
 
 
-    public class SpaceWindow : GameWindow
+    public class SpaceWindow : GameWindow, IGraphics
     {
         public GameEngine Engine { get; private set; }
+        public MessageBus Bus { get; private set; }
         public ConcurrentDictionary<Type, IGameObjectView> Views { get; private set; }
-        
+        public double FramesPerSecond { get; private set; }
         public Camera Camera { get; private set; }
         //private bool _graphicsDirty = true;
         private Matrix4 _perspective;
 
         private Rectangle _screen;
 
-
         public SpaceWindow(GameEngine engine)
             : base(1280, 720, new GraphicsMode(32, 0, 0, 4), "ORTS.Space")
         {
             _screen = new Rectangle(0, 0, 1280, 720);
 
-            VSync = VSyncMode.On;
+            VSync = VSyncMode.Off;
             Views = new ConcurrentDictionary<Type, IGameObjectView>();
             Engine = engine;
+            Bus = Engine.Bus;
             var map = new KeyMap();
 
             KeyPress += (sender, e) => Engine.CurrentState.KeyPress(new KeyPressMessage(Engine.Timer.LastTickTime, e.KeyChar));
@@ -83,13 +77,10 @@ namespace ORTS.Space
             Mouse.ButtonUp += (sender, e) => Engine.CurrentState.MouseButtonUp(new MouseButtonUpMessage(Engine.Timer.LastTickTime, e.Position, MapMouseButton(e.Button)));
             Mouse.WheelChanged += (sender, e) => Camera.Translate(new Vect3(0, 0, -e.DeltaPrecise));
 
-
-
-
             Camera = new Camera();
             Camera.Translate(new Vect3(0, 0, 30));
-            engine.Bus.Add(new GraphicsLoadedMessage(engine.Timer.LastTickTime));
-            engine.Bus.Add(new ObjectCreationRequest(engine.Timer.LastTickTime, typeof(SkyBox)));
+            LoadViews();
+
         }
 
         private Button MapMouseButton(MouseButton button)
@@ -102,31 +93,23 @@ namespace ORTS.Space
                     return Button.Middle;
                 case MouseButton.Right:
                     return Button.Right;
-                case MouseButton.Button1:
-                case MouseButton.Button2:
-                case MouseButton.Button3:
-                case MouseButton.Button4:
-                case MouseButton.Button5:
-                case MouseButton.Button6:
-                case MouseButton.Button7:
-                case MouseButton.Button8:
-                case MouseButton.Button9:
-                case MouseButton.LastButton:
-                    return Button.Left;
                 default:
-                    throw new ArgumentOutOfRangeException("button");
+                    return Button.Left;
             }
         }
-        void Mouse_ButtonDown(object sender, MouseButtonEventArgs e)
+
+        private void LoadViews()
         {
-            
+            var count = 0;
+            var types = AppDomain.CurrentDomain.GetAssemblies().ToList().SelectMany(s => s.GetTypes()).Where(p => typeof(IGameObjectView).IsAssignableFrom(p) && p.IsClass);
+            foreach (var type1 in types.Where(type1 => type1.IsDefined(typeof(BindViewAttribute), false)))
+            {
+                Views.TryAdd(type1.GetCustomAttributes(false).OfType<BindViewAttribute>().First().GameObjectType, (IGameObjectView)Activator.CreateInstance(type1, Camera));
+                count++;
+            }
+            Bus.Add(new SystemMessage(Engine.Timer.LastTickTime, "Found " + count + " Views"));
         }
 
-
-        public void LoadView(Type type, IGameObjectView view)
-        {
-            Views.TryAdd(type, view);
-        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -139,14 +122,12 @@ namespace ORTS.Space
             GL.Enable(EnableCap.VertexArray);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-
-
-
             foreach (var pair in Views.Where(pair => !pair.Value.Loaded))
             {
                 pair.Value.Load();
-                Engine.Bus.Add(new SystemMessage(Engine.Timer.LastTickTime, "Loaded View: " + pair.Value.GetType().Name));
+                Bus.Add(new SystemMessage(Engine.Timer.LastTickTime, "Loaded View: " + pair.Value.GetType().Name));
             }
+            Bus.Add(new GraphicsLoadedMessage(Engine.Timer.LastTickTime,this));
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -169,7 +150,8 @@ namespace ORTS.Space
                 }
             }
             SwapBuffers();
-            Title = "State: " + Engine.CurrentState + " FPS: " + string.Format("{0:F}", 1.0 / e.Time) + " Views Loaded: " + Views.Count + " Game Objects: " + Engine.Factory.GameObjects.Count;
+            FramesPerSecond = 1/e.Time;
+            Title = "State: " + Engine.CurrentState + " FPS: " + string.Format("{0:F}", FramesPerSecond) + " Views Loaded: " + Views.Count + " Game Objects: " + Engine.Factory.GameObjects.Count;
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -228,6 +210,7 @@ namespace ORTS.Space
             GL.Translate(Camera.Postion.ToVector3());
             var aa = Camera.Rotation.toAxisAngle();
             GL.Rotate(aa.Angle.Degrees, aa.Axis.ToVector3d());
+            GL.Enable(EnableCap.DepthTest);
         }
 
         private void Setup2D()
@@ -239,6 +222,7 @@ namespace ORTS.Space
             GL.LoadIdentity();
             GL.Scale(2.0 / Width, -2.0 / Height, -1);
             GL.Translate(-Width/2.0, -Height/2.0, 0);
+            GL.Disable(EnableCap.DepthTest);
         }
 
         protected override void OnResize(EventArgs e)
@@ -249,6 +233,7 @@ namespace ORTS.Space
             GL.Viewport(0, 0, Width, Height);
             _perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1, 512);
         }
+
         protected override void OnUnload(EventArgs e)
         {
             foreach (var pair in Views)
@@ -257,10 +242,13 @@ namespace ORTS.Space
             }
             base.OnUnload(e);
         }
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Engine.Stop();
             base.OnClosing(e);
         }
+
+
     }
 }

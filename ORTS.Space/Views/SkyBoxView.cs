@@ -68,9 +68,9 @@ namespace ORTS.Space.Views
             GL.Uniform3(_uniformCamera, new Vector3(0,0,-30));
             _shader.Disable();
 
-            Console.WriteLine("pos:" + _attribPosition);
-            Console.WriteLine("size:" + _attribSize);
-            Console.WriteLine("uni:"+ _uniformCamera);
+            //Console.WriteLine("pos:" + _attribPosition);
+            //Console.WriteLine("size:" + _attribSize);
+            //Console.WriteLine("uni:"+ _uniformCamera);
 
             var dataList = new List<float>();
             

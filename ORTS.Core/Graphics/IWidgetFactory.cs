@@ -9,5 +9,6 @@ namespace ORTS.Core.Graphics
     public interface IWidgetFactory : IHasMessageBus
     {
         List<IWidget> Widgets { get; }
+        void Initialise(IGraphics graphics);
     }
 }

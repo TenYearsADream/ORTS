@@ -25,6 +25,7 @@ namespace ORTS.Space.States
         public void Show()
         {
             _engine.Bus.Add(new WidgetCreationRequest(_engine.Timer.LastTickTime, typeof(ChatWidget)));
+            _engine.Bus.Add(new WidgetCreationRequest(_engine.Timer.LastTickTime, typeof(FPSWidget)));
         }
 
         public void Hide()

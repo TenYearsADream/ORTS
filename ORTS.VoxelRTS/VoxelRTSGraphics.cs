@@ -45,5 +45,10 @@ namespace ORTS.VoxelRTS
         {
 
         }
+
+        public float FramesPerSecond
+        {
+            get { throw new System.NotImplementedException(); }
+        }
     }
 }

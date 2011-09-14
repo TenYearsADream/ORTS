@@ -11,6 +11,14 @@ namespace ORTS.Core.Graphics
     public class WidgetFactory: IWidgetFactory
     {
         public List<IWidget> Widgets { get; private set; }
+
+        protected IGraphics Graphics { get; set; }
+
+        public void Initialise(IGraphics graphics)
+        {
+            Graphics = graphics;
+        }
+
         public readonly object WidgetsLock = new object();
         public MessageBus Bus { get; private set; }
         public WidgetFactory(MessageBus bus)

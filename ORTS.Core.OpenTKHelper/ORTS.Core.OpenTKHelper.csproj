@@ -58,6 +58,7 @@
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="TextWriter.cs" />
     <Compile Include="TKHelper.cs" />
+    <Compile Include="VBO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ORTS.Core\ORTS.Core.csproj">

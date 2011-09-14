@@ -13,7 +13,7 @@ namespace ORTS.Core.Messaging.Messages
         }
         public override string ToString()
         {
-            return "{0} Resize - {1}".fmt(TimeSent,Screen);
+            return "{0} RESIZE - {1}".fmt(TimeSent,Screen);
         }
     }
 }

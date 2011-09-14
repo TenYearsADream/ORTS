@@ -50,11 +50,15 @@ namespace ORTS.Space.Widgets
 
         public void Update(double delta)
         {
-            _background = new Rectangle(10, 10, 400, 20);
+            _background = new Rectangle(100, 100, 400, 20);
         }
 
         public void Render()
         {
+            GL.Disable(EnableCap.Texture2D);
+    
+
+            
             GL.Begin(BeginMode.Quads);
 
             GL.Color4(1, 0, 0, 0.5);
@@ -64,6 +68,7 @@ namespace ORTS.Space.Widgets
             GL.Vertex3(_background.Left, _background.Top, -0.1);
 
             GL.End();
+            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

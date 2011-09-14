@@ -63,6 +63,7 @@
     <Compile Include="GameObject\IParent.cs" />
     <Compile Include="Graphics\ICamera.cs" />
     <Compile Include="Graphics\IGameObjectView.cs" />
+    <Compile Include="Graphics\IGraphicsLoader.cs" />
     <Compile Include="Graphics\IModel.cs" />
     <Compile Include="Graphics\IWidget.cs" />
     <Compile Include="Graphics\IWidgetFactory.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Messaging\IHasMessageBus.cs" />
     <Compile Include="Messaging\Messages\BaseMessage.cs" />
     <Compile Include="Messaging\Messages\ChatMessage.cs" />
+    <Compile Include="Messaging\Messages\GameStartMessage.cs" />
     <Compile Include="Messaging\Messages\KeyPressMessage.cs" />
     <Compile Include="Messaging\Messages\WidgetsDestroyAll.cs" />
     <Compile Include="Messaging\Messages\ScreenResizeMessage.cs" />

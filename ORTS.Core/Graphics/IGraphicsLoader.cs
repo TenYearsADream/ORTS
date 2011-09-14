@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ORTS.Core.Messaging;
 
 namespace ORTS.Core.Graphics
 {
-    public interface IGraphics : IHasMessageBus
+    public interface IGraphicsLoader
     {
-        double FramesPerSecond { get; }
+        void Start(GameEngine engine);
+        void Stop();
     }
 }

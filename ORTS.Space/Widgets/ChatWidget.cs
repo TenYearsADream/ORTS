@@ -35,6 +35,7 @@ namespace ORTS.Space.Widgets
 
         public void Load(Rectangle screen)
         {
+            _screen = screen;
             Bus.OfType<ScreenResizeMessage>().Subscribe(m => _screen = m.Screen);
 
 
@@ -77,8 +78,9 @@ namespace ORTS.Space.Widgets
             GL.Color4(1.0f, 1.0f, 1.0f, 1.0f);
             
             var _background = new Rectangle(10, 10, 400, 400);
-            GL.Begin(BeginMode.Quads);
             GL.BindTexture(TextureTarget.Texture2D, texture);
+            GL.Begin(BeginMode.Quads);
+           
             GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(_background.Left, _background.Bottom, -0.1);
             GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(_background.Right, _background.Bottom, -0.1);
             GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(_background.Right, _background.Top, -0.1);

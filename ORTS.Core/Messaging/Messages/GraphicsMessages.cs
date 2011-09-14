@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ORTS.Core.Graphics;
 using ORTS.Core.Timing;
 
 namespace ORTS.Core.Messaging.Messages
@@ -16,10 +17,15 @@ namespace ORTS.Core.Messaging.Messages
     }
     public class GraphicsLoadedMessage : BaseMessage
     {
-        public GraphicsLoadedMessage(IGameTime timeSent)
+        public IGraphics Graphics { get; private set; }
+        public GraphicsLoadedMessage(IGameTime timeSent, IGraphics graphics)
             : base(timeSent)
         {
-
+            Graphics = graphics;
+        }
+        public override string ToString()
+        {
+            return "{0} GRAPHICS LOADED".fmt(TimeSent);
         }
     }
     public class GraphicsReady : BaseMessage
